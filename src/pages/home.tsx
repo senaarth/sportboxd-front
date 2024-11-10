@@ -40,20 +40,12 @@ export default function Home() {
       awayScore: 9,
       avgRating: 4.5,
       ratingsNum: 10000,
-    },
-    {
-      matchId: 2,
-      homeTeam: "Flamengo",
-      homeScore: 0,
-      awayTeam: "Vasco",
-      awayScore: 7,
-      avgRating: 4.5,
-      ratingsNum: 10000,
+      date: new Date(),
     },
   ]);
 
   return (
-    <div className="bg-neutral-950 w-full h-svh flex flex-col items-center justify-start px-4 py-5 gap-5">
+    <div className="bg-neutral-950 w-full min-h-svh flex flex-col items-center justify-start px-4 py-5 gap-5">
       <div className="w-full max-w-4xl">
         <img
           alt="Logo sportboxd, imagem com nome do site escrito"

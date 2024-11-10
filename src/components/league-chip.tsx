@@ -18,7 +18,7 @@ export function LeagueChip({
       className={twMerge(
         "flex flex-row items-center px-2 py-1 gap-1 rounded-full transition-all",
         isSelected
-          ? "bg-neutral-800 border border-neutral-700 opacity-1"
+          ? "bg-neutral-900 border border-neutral-800 opacity-1"
           : "bg-transparent border border-transparent opacity-50 cursor-pointer hover:opacity-90 hover:bg-neutral-900"
       )}
       onClick={onClick}

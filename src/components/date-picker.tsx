@@ -13,7 +13,7 @@ const customTheme: CustomFlowbiteTheme["datepicker"] = {
       base: "absolute top-10 z-50 block pt-2",
       inline: "relative top-0 z-auto",
       inner:
-        "inline-block rounded-md bg-neutral-800 border border-neutral-700 p-1 shadow-lg",
+        "inline-block rounded-md bg-neutral-900 border border-neutral-800 p-1 shadow-lg",
     },
     header: {
       base: "",
@@ -105,7 +105,7 @@ export function DatePicker({ onDatePick }: DatePickerProps) {
     <div className="w-full flex flex-col">
       <div>
         <button
-          className="w-full h-10 flex items-center justify-center gap-2 border border-neutral-700 bg-neutral-800 rounded-md"
+          className="w-full h-10 flex items-center justify-center gap-2 border border-neutral-800 bg-neutral-900 rounded-md hover:brightness-150"
           onClick={() => setIsExpanded(!isExpanded)}
           type="button"
         >

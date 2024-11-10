@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { formatDateLabel } from "../utils/date";
 
 interface MatchCardProps {
   matchId: number;
@@ -9,6 +10,7 @@ interface MatchCardProps {
   awayScore: number;
   avgRating: number;
   ratingsNum: number;
+  date: Date;
 }
 
 export function MatchCard({
@@ -19,12 +21,13 @@ export function MatchCard({
   awayScore,
   avgRating,
   ratingsNum,
+  date,
 }: MatchCardProps) {
   const navigate = useNavigate();
 
   return (
     <button
-      className="w-full rounded-md flex flex-col gap-4 p-4 border border-neutral-600 bg-neutral-800"
+      className="w-full rounded-md flex flex-col gap-4 p-4 border border-neutral-800 bg-neutral-900 hover:brightness-150"
       onClick={() => navigate(`/partidas/${matchId}`)}
       type="button"
     >
@@ -76,7 +79,9 @@ export function MatchCard({
       </div>
       <div className="w-full flex items-center justify-between">
         <p className="text-sm text-neutral-100">{avgRating}/5</p>
-        <p className="text-neutral-500 text-xs">{ratingsNum} avaliações</p>
+        <p className="text-neutral-500 text-xs">
+          {formatDateLabel(date)} · {ratingsNum} avaliações
+        </p>
       </div>
     </button>
   );
