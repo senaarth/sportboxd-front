@@ -1,13 +1,21 @@
-import { lazy } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  redirect,
+} from "react-router-dom";
 
-const Home = lazy(() => import("./pages/home"));
+import Home from "./pages/home";
+import Match from "./pages/match";
 
 export function Router() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Home />,
+    },
+    {
+      path: "/partidas/:id",
+      element: <Match />,
     },
   ]);
 
