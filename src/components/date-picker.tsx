@@ -59,7 +59,7 @@ const customTheme: CustomFlowbiteTheme["datepicker"] = {
     },
     months: {
       items: {
-        base: "grid grid-cols-4 gap-1",
+        base: "w-64 grid grid-cols-4 gap-1",
         item: {
           base: "aspect-square block flex-1 cursor-pointer rounded-md border-0 text-center text-sm font-medium leading-9 text-white hover:bg-lime-700 hover:ring-2 hover:ring-lime-400",
           selected: "bg-lime-400 text-neutral-900 hover:bg-lime-400",
@@ -70,7 +70,7 @@ const customTheme: CustomFlowbiteTheme["datepicker"] = {
     },
     years: {
       items: {
-        base: "grid grid-cols-4 gap-1",
+        base: "w-64 grid grid-cols-4 gap-1",
         item: {
           base: "aspect-square block flex-1 cursor-pointer rounded-md border-0 text-center text-sm font-medium leading-9 text-white hover:bg-lime-700 hover:ring-2 hover:ring-lime-400",
           selected: "bg-lime-400 text-neutral-900 hover:bg-lime-400",
@@ -81,7 +81,7 @@ const customTheme: CustomFlowbiteTheme["datepicker"] = {
     },
     decades: {
       items: {
-        base: "grid grid-cols-4 gap-1",
+        base: "w-64 grid grid-cols-4 gap-1",
         item: {
           base: "aspect-square block flex-1 cursor-pointer rounded-md border-0 text-center text-sm font-medium leading-9 text-white hover:bg-lime-700 hover:ring-2 hover:ring-lime-400",
           selected: "bg-lime-400 text-neutral-900 hover:bg-lime-400",

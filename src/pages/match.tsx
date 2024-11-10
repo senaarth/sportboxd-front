@@ -2,6 +2,9 @@ import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatDateLabel } from "../utils/date";
 import { Loading } from "../components/loading";
+import { Stars } from "../components/stars";
+import { RatingModal } from "../components/rating-modal";
+import { useState } from "react";
 
 const CrestComponent = ({ team }: { team: string }) => {
   return (
@@ -25,6 +28,7 @@ const CrestComponent = ({ team }: { team: string }) => {
 export default function Match() {
   const params = useParams();
   const navigate = useNavigate();
+  const [isRatingModalOpen, setRatingModalOpen] = useState<boolean>(false);
   const {
     data: match,
     error,
@@ -106,10 +110,12 @@ export default function Match() {
       </div>
       <div className="w-full max-w-4xl flex flex-col items-center justify-start p-4 mx-auto">
         <button
-          className="w-full text-sm text-neutral-200 py-2 hover:brightness-110 flex items-center justify-between"
+          className="w-full text-sm text-neutral-200 py-2 transition-all hover:brightness-150 flex items-center justify-between"
+          onClick={() => setRatingModalOpen(true)}
           type="button"
         >
           Toque para avaliar
+          <Stars color="neutral" number={0} size="lg" />
         </button>
         <span className="w-full h-[1px] bg-neutral-800 my-4" />
         <div className="w-full flex items-center justify-start py-2">
@@ -144,6 +150,11 @@ export default function Match() {
           )}
         </div>
       </div>
+      <RatingModal
+        isOpen={isRatingModalOpen}
+        match={match}
+        onClose={() => setRatingModalOpen(false)}
+      />
     </div>
   );
 }
