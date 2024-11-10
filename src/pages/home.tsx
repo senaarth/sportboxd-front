@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+import { DatePicker } from "../components/date-picker";
 import { LeagueChip } from "../components/league-chip";
 
 type League = {
@@ -40,6 +42,13 @@ export default function Home() {
             onClick={() => selectLeague(league)}
           />
         ))}
+      </div>
+      <div className="w-full max-w-4xl flex">
+        <DatePicker
+          onDatePick={(date: Date) => {
+            console.log(date);
+          }}
+        />
       </div>
     </div>
   );
