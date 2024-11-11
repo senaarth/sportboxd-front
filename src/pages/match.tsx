@@ -6,6 +6,26 @@ import { Stars } from "../components/stars";
 import { RatingModal } from "../components/rating-modal";
 import { useState } from "react";
 
+const RatingProportionComponent = ({
+  rating,
+  proportion,
+}: {
+  rating: number;
+  proportion: number;
+}) => {
+  return (
+    <div className="flex items-center gap-1">
+      <div className="w-14 h-[3px] bg-neutral-800 flex items-center justify-start rounded overflow-hidden">
+        <span
+          className="h-1 bg-neutral-600"
+          style={{ width: `${proportion * 100}%` }}
+        />
+      </div>
+      <Stars color="neutral" number={rating} size="2xs" />
+    </div>
+  );
+};
+
 const CrestComponent = ({ team }: { team: string }) => {
   return (
     <div className="w-full flex flex-col items-center px-3 gap-2">
@@ -29,6 +49,7 @@ export default function Match() {
   const params = useParams();
   const navigate = useNavigate();
   const [isRatingModalOpen, setRatingModalOpen] = useState<boolean>(false);
+  const [ratingValue, setRatingValue] = useState<number>(0);
   const {
     data: match,
     error,
@@ -43,6 +64,13 @@ export default function Match() {
       awayScore: 10,
       avgRating: 4.5,
       ratingsNum: 10000,
+      ratingProportion: {
+        "1": 0.05,
+        "2": 0.05,
+        "3": 0.1,
+        "4": 0.2,
+        "5": 0.7,
+      },
     };
   });
   const {
@@ -109,19 +137,48 @@ export default function Match() {
         </div>
       </div>
       <div className="w-full max-w-4xl flex flex-col items-center justify-start p-4 mx-auto">
-        <button
-          className="w-full text-sm text-neutral-200 py-2 transition-all hover:brightness-150 flex items-center justify-between"
-          onClick={() => setRatingModalOpen(true)}
-          type="button"
-        >
-          Toque para avaliar
-          <Stars color="neutral" number={0} size="lg" />
-        </button>
+        <div className="w-full flex items-center justify-between py-2">
+          <p className="text-sm text-neutral-200">Toque para avaliar</p>
+          <Stars
+            color="lime"
+            number={0}
+            onStarClick={(value) => {
+              setRatingModalOpen(true);
+              setRatingValue(value);
+            }}
+            size="lg"
+          />
+        </div>
         <span className="w-full h-[1px] bg-neutral-800 my-4" />
         <div className="w-full flex items-center justify-start py-2">
           <div className="flex flex-col items-start text-neutral-200 p-2 gap-1">
             <p className="text-sm">Avaliações</p>
             <p className="text-4xl font-semibold">{match.avgRating}/5</p>
+          </div>
+          <div className="ml-auto flex flex-col items-end justify-start gap-1">
+            <RatingProportionComponent
+              rating={5}
+              proportion={match.ratingProportion[5]}
+            />
+            <RatingProportionComponent
+              rating={4}
+              proportion={match.ratingProportion[4]}
+            />
+            <RatingProportionComponent
+              rating={3}
+              proportion={match.ratingProportion[3]}
+            />
+            <RatingProportionComponent
+              rating={2}
+              proportion={match.ratingProportion[2]}
+            />
+            <RatingProportionComponent
+              rating={1}
+              proportion={match.ratingProportion[1]}
+            />
+            <p className="text-neutral-500 text-xs mt-1">
+              {match.ratingsNum} avaliações
+            </p>
           </div>
         </div>
         <div className="w-full flex flex-col items-center justify-start gap-2 mt-4">
@@ -151,6 +208,7 @@ export default function Match() {
         </div>
       </div>
       <RatingModal
+        defaultValue={ratingValue}
         isOpen={isRatingModalOpen}
         match={match}
         onClose={() => setRatingModalOpen(false)}

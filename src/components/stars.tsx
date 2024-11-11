@@ -3,26 +3,44 @@ import { twMerge } from "tailwind-merge";
 
 const colorVariants = {
   lime: "bg-lime-500",
-  neutral: "bg-neutral-500",
+  neutral: "bg-neutral-200",
+  "neutral-dark": "bg-neutral-500",
 };
 
 const hoverVariants = {
   lime: "hover:bg-lime-500",
   neutral: "hover:bg-neutral-500",
+  "neutral-dark": "bg-neutral-800",
 };
 
 const sizeVariants = {
-  xs: "",
-  sm: "",
-  base: "",
-  lg: "w-[26px] h-[26px]",
+  "2xs": {
+    gap: "gap-[1px]",
+    size: "w-[6px] h-[6px]",
+  },
+  xs: {
+    gap: "",
+    size: "",
+  },
+  sm: {
+    gap: "",
+    size: "",
+  },
+  base: {
+    gap: "",
+    size: "",
+  },
+  lg: {
+    gap: "gap-1.5",
+    size: "w-[26px] h-[26px]",
+  },
 };
 
 interface StarsProps {
-  color: "lime" | "neutral";
+  color: "lime" | "neutral" | "neutral-dark";
   number: number;
   onStarClick?: (rating: number) => void;
-  size: "xs" | "sm" | "base" | "lg";
+  size: "2xs" | "xs" | "sm" | "base" | "lg";
 }
 
 export function Stars({ color, number, onStarClick, size }: StarsProps) {
@@ -30,13 +48,13 @@ export function Stars({ color, number, onStarClick, size }: StarsProps) {
     useState<number>(number);
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className={twMerge("flex items-center", sizeVariants[size].gap)}>
       {[0, 1, 2, 3, 4].map((item) => {
         return (
           <div
             className={twMerge(
               "flex items-center justify-center",
-              sizeVariants[size]
+              sizeVariants[size].size
             )}
             style={{
               maskImage: `url(/icons/star_mask.svg)`,
@@ -50,7 +68,7 @@ export function Stars({ color, number, onStarClick, size }: StarsProps) {
                 item + 0.5 <= starsToHighlightNum
                   ? colorVariants[color]
                   : "bg-neutral-800",
-                onStarClick ? hoverVariants[color] : ""
+                onStarClick ? hoverVariants[color] : "cursor-default"
               )}
               onClick={() => (onStarClick ? onStarClick(item + 0.5) : null)}
               onMouseEnter={() => {
@@ -69,7 +87,7 @@ export function Stars({ color, number, onStarClick, size }: StarsProps) {
                 item + 1 <= starsToHighlightNum
                   ? colorVariants[color]
                   : "bg-neutral-800",
-                onStarClick ? hoverVariants[color] : ""
+                onStarClick ? hoverVariants[color] : "cursor-default"
               )}
               onClick={() => (onStarClick ? onStarClick(item + 1) : null)}
               onMouseEnter={() => {

@@ -94,6 +94,7 @@ const CrestComponent = ({ team }: { team: string }) => {
 };
 
 interface RatingModalProps {
+  defaultValue: number;
   isOpen: boolean;
   match: {
     date: Date;
@@ -108,7 +109,12 @@ interface RatingModalProps {
   onClose: () => void;
 }
 
-export function RatingModal({ isOpen, match, onClose }: RatingModalProps) {
+export function RatingModal({
+  defaultValue,
+  isOpen,
+  match,
+  onClose,
+}: RatingModalProps) {
   const mutation = useMutation({
     mutationFn: async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -126,7 +132,10 @@ export function RatingModal({ isOpen, match, onClose }: RatingModalProps) {
     watch,
   } = useForm<RatingFormSchema>({
     resolver: zodResolver(ratingFormSchema),
+    defaultValues: { rating: defaultValue },
   });
+
+  console.log(defaultValue);
 
   useEffect(() => {
     reset();
@@ -160,7 +169,7 @@ export function RatingModal({ isOpen, match, onClose }: RatingModalProps) {
             <span className="w-full h-[1px] bg-neutral-800 my-4" />
             <Stars
               color="lime"
-              number={watch("rating")}
+              number={watch("rating") || defaultValue}
               onStarClick={(number) => setValue("rating", number)}
               size="lg"
             />
