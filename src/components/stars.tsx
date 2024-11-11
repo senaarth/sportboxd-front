@@ -38,6 +38,11 @@ export function Stars({ color, number, onStarClick, size }: StarsProps) {
               "flex items-center justify-center",
               sizeVariants[size]
             )}
+            style={{
+              maskImage: `url(/icons/star_mask.svg)`,
+              maskSize: "100%",
+              maskRepeat: "no-repeat",
+            }}
           >
             <button
               className={twMerge(
