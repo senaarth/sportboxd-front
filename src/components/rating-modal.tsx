@@ -135,8 +135,6 @@ export function RatingModal({
     defaultValues: { rating: defaultValue },
   });
 
-  console.log(defaultValue);
-
   useEffect(() => {
     reset();
   }, [isOpen, reset]);

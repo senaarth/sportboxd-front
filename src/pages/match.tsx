@@ -5,6 +5,7 @@ import { Loading } from "../components/loading";
 import { Stars } from "../components/stars";
 import { RatingModal } from "../components/rating-modal";
 import { useState } from "react";
+import { getMatchRatings } from "../api";
 
 const RatingProportionComponent = ({
   rating,
@@ -54,10 +55,10 @@ export default function Match() {
     data: match,
     error,
     isLoading,
-  } = useQuery(["match", params.id], () => {
+  } = useQuery<Match>(["match", params.id], () => {
     return {
       date: new Date(),
-      matchId: 1,
+      matchId: "1",
       homeTeam: "Flamengo",
       homeScore: 0,
       awayTeam: "Vasco",
@@ -77,25 +78,9 @@ export default function Match() {
     data: ratings,
     error: ratingsError,
     isLoading: isLoadingRatings,
-  } = useQuery(["ratings", params.id], () => {
-    return [
-      {
-        id: 1,
-        author: "senaarth",
-        title: "Flamengo 🤏🏾",
-        comment: "Flamengo você não é presidente mais.",
-        rating: 5,
-        date: new Date(),
-      },
-      {
-        id: 2,
-        author: "senaarth",
-        title: "Flamengo 🤏🏾",
-        comment: "Flamengo você não é presidente mais.",
-        rating: 5,
-        date: new Date(),
-      },
-    ];
+  } = useQuery<Rating[]>(["ratings", params.id], async () => {
+    if (!params.id) return [];
+    return await getMatchRatings(params.id);
   });
 
   if (isLoading || error || !match)
@@ -185,25 +170,42 @@ export default function Match() {
           {isLoadingRatings || ratingsError || !ratings ? (
             <Loading />
           ) : (
-            ratings.map((rating) => (
-              <div
-                key={`rating-${rating.id}`}
-                className="w-full bg-neutral-900 border border-neutral-800 rounded-md text-neutral-200 p-4"
-              >
-                <div className="w-full flex items-center justify-between">
-                  <div>
-                    <p className="text-base font-semibold">{rating.title}</p>
+            <>
+              {ratings.length ? (
+                ratings.map((rating) => (
+                  <div
+                    key={`rating-${rating.ratingId}`}
+                    className="w-full bg-neutral-900 border border-neutral-800 rounded-md text-neutral-200 p-4"
+                  >
+                    <div className="w-full flex items-center justify-between">
+                      <div>
+                        <p className="text-base font-semibold">
+                          {rating.title}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end justify-center">
+                        <p className="text-xs font-semibold">{rating.author}</p>
+                        <p className="text-xs text-neutral-600">
+                          {formatDateLabel(rating.createdAt)}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="text-sm mt-4">{rating.content}</p>
                   </div>
-                  <div className="flex flex-col items-end justify-center">
-                    <p className="text-xs font-semibold">{rating.author}</p>
-                    <p className="text-xs text-neutral-600">
-                      {formatDateLabel(rating.date)}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-sm mt-4">{rating.comment}</p>
-              </div>
-            ))
+                ))
+              ) : (
+                <p className="text-sm text-neutral-200 text-center mt-5">
+                  Parace que não há avaliações para essa partida, que tal{" "}
+                  <button
+                    className="font-medium text-lime-500"
+                    onClick={() => setRatingModalOpen(true)}
+                    type="button"
+                  >
+                    fazer a primeira?
+                  </button>
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

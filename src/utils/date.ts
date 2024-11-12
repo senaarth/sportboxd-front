@@ -1,4 +1,6 @@
-function formatDateLabel(date: Date): string {
+function formatDateLabel(date?: Date): string {
+  if (!date) return "";
+
   const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);

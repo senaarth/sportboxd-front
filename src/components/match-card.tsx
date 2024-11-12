@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { formatDateLabel } from "../utils/date";
 
 interface MatchCardProps {
-  matchId: number;
+  matchId: string;
   homeTeam: string;
   homeScore: number;
   awayTeam: string;

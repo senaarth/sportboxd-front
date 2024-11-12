@@ -5,6 +5,7 @@ import { LeagueChip } from "../components/league-chip";
 import { useQuery } from "react-query";
 import { MatchCard } from "../components/match-card";
 import { Loading } from "../components/loading";
+import { getMatches } from "../api";
 
 type League = {
   code: string;
@@ -27,22 +28,21 @@ const AVAILABLE_LEAGUES: League[] = [
 
 export default function Home() {
   const [selectedLeague, selectLeague] = useState<League>(AVAILABLE_LEAGUES[0]);
+  const [selectedDate, selectDate] = useState<Date>(new Date());
   const {
     isLoading,
     error,
     data: matches,
-  } = useQuery(["matches"], () => [
-    {
-      matchId: 1,
-      homeTeam: "Flamengo",
-      homeScore: 0,
-      awayTeam: "Vasco",
-      awayScore: 9,
-      avgRating: 4.5,
-      ratingsNum: 10000,
-      date: new Date(),
-    },
-  ]);
+  } = useQuery<Match[]>(
+    ["matches", selectedLeague.code, selectedDate.toLocaleDateString("pt-BR")],
+    async () => {
+      const results = await getMatches(
+        selectedDate.toLocaleDateString("pt-BR"),
+        selectedLeague.code
+      );
+      return results;
+    }
+  );
 
   return (
     <div className="bg-neutral-950 w-full min-h-svh flex flex-col items-center justify-start px-4 py-5 gap-5">
@@ -64,11 +64,7 @@ export default function Home() {
         ))}
       </div>
       <div className="w-full max-w-4xl flex">
-        <DatePicker
-          onDatePick={(date: Date) => {
-            console.log(date);
-          }}
-        />
+        <DatePicker onDatePick={(date: Date) => selectDate(date)} />
       </div>
       {isLoading ? (
         <Loading />
@@ -76,9 +72,16 @@ export default function Home() {
         <>
           {error ? null : (
             <div className="w-full max-w-4xl flex flex-col items-center justify-start gap-2">
-              {matches?.map((match) => (
-                <MatchCard key={match.matchId} {...match} />
-              ))}
+              {matches?.length ? (
+                matches.map((match) => (
+                  <MatchCard key={match.matchId} {...match} />
+                ))
+              ) : (
+                <p className="text-sm text-neutral-200 mt-5 text-center max-w-96">
+                  Parece que não encontramos partidas nas datas/ligas
+                  selecionadas, que tal mudar os filtros?
+                </p>
+              )}
             </div>
           )}
         </>

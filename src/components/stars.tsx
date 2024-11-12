@@ -52,6 +52,7 @@ export function Stars({ color, number, onStarClick, size }: StarsProps) {
       {[0, 1, 2, 3, 4].map((item) => {
         return (
           <div
+            key={`star-${item}`}
             className={twMerge(
               "flex items-center justify-center",
               sizeVariants[size].size

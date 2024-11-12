@@ -1,0 +1,57 @@
+import axios from "axios";
+
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
+async function getMatches(since: string, country: string) {
+  return await axios
+    .get(`${baseUrl}/matches`, { params: { since, country } })
+    .then(({ data }) => {
+      return data.map((match: RemoteMatch) => ({
+        ...match,
+        matchId: match._id,
+        date: new Date(match.date),
+        homeTeam: match.home_team,
+        homeScore: match.home_score,
+        awayTeam: match.away_team,
+        awayScore: match.away_score,
+        ratingsNum: match.ratings_num,
+      }));
+    })
+    .catch(() => {
+      // throw new Error("Erro ao buscar as partidas");
+      return [];
+    });
+}
+
+async function getMatchRatings(matchId: string) {
+  return await axios
+    .get(`${baseUrl}/ratings/${matchId}`)
+    .then(({ data }) => {
+      return data.map((rating: RemoteRating) => ({
+        ...rating,
+        ratingId: rating._id,
+        matchId: rating.match_id,
+        createdAt: new Date(rating.created_at),
+      }));
+    })
+    .catch(() => {
+      // throw new Error("Erro ao buscar as partidas");
+      return [];
+    });
+}
+
+async function postRating(data: {
+  title: string;
+  rating: number;
+  author: string;
+  comment: string;
+}) {
+  await axios
+    .post(`${baseUrl}/matches`, data)
+    .then(() => {})
+    .catch(() => {
+      throw new Error("Erro ao publicar avaliação");
+    });
+}
+
+export { getMatches, getMatchRatings, postRating };
