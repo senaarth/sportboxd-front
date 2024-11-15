@@ -2,9 +2,9 @@ import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function getMatches(since: string, league: string) {
+async function getMatches(since: string, until: string, league: string) {
   return await axios
-    .get(`${baseUrl}/matches/`, { params: { since, league } })
+    .get(`${baseUrl}/matches/`, { params: { since, until, league } })
     .then(({ data }) => {
       return data.map((match: RemoteMatch) => ({
         ...match,

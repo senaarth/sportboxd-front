@@ -94,12 +94,13 @@ const customTheme: CustomFlowbiteTheme["datepicker"] = {
 };
 
 interface DatePickerProps {
+  defaultValue?: Date;
   onDatePick: (date: Date) => void;
 }
 
-export function DatePicker({ onDatePick }: DatePickerProps) {
+export function DatePicker({ defaultValue, onDatePick }: DatePickerProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [selectedDate, selectDate] = useState<Date>(new Date());
+  const [selectedDate, selectDate] = useState<Date>(defaultValue || new Date());
 
   return (
     <div className="w-full flex flex-col">
@@ -126,6 +127,7 @@ export function DatePicker({ onDatePick }: DatePickerProps) {
           )}
         >
           <FlowbiteDatepicker
+            defaultValue={defaultValue}
             inline
             language="pt-BR"
             labelTodayButton="Hoje"
