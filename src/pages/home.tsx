@@ -22,7 +22,7 @@ const AVAILABLE_LEAGUES: League[] = [
   {
     code: "PL",
     sport: "soccer",
-    label: "Premiere League",
+    label: "Premier League",
   },
 ];
 

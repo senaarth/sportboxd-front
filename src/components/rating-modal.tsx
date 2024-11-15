@@ -10,6 +10,7 @@ import { Stars } from "./stars";
 import { formatDateLabel } from "../utils/date";
 import { Input } from "./input";
 import { twMerge } from "tailwind-merge";
+import { postRating } from "../api";
 
 const ratingFormSchema = z.object({
   rating: z.number(),
@@ -96,17 +97,10 @@ const CrestComponent = ({ team }: { team: string }) => {
 interface RatingModalProps {
   defaultValue: number;
   isOpen: boolean;
-  match: {
-    date: Date;
-    matchId: number | string;
-    homeTeam: string;
-    homeScore: number;
-    awayTeam: string;
-    awayScore: number;
-    avgRating: number;
-    ratingsNum: number;
-  };
+  match: Match;
   onClose: () => void;
+  onSubmitError: () => void;
+  onSubmitSuccess: () => void;
 }
 
 export function RatingModal({
@@ -114,14 +108,23 @@ export function RatingModal({
   isOpen,
   match,
   onClose,
+  onSubmitError,
+  onSubmitSuccess,
 }: RatingModalProps) {
   const mutation = useMutation({
-    mutationFn: async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      onClose();
+    mutationFn: async (data: {
+      rating: number;
+      author: string;
+      title: string;
+      comment: string;
+    }) => {
+      await postRating({
+        ...data,
+        match_id: match.matchId,
+      });
     },
-    onError: () => {},
-    onSuccess: () => {},
+    onError: onSubmitError,
+    onSuccess: onSubmitSuccess,
   });
   const {
     register,
@@ -135,9 +138,7 @@ export function RatingModal({
     defaultValues: { rating: defaultValue },
   });
 
-  useEffect(() => {
-    reset();
-  }, [isOpen, reset]);
+  useEffect(() => reset(), [isOpen, reset]);
 
   return (
     <Modal
@@ -148,7 +149,7 @@ export function RatingModal({
       theme={customTheme}
     >
       <Modal.Header />
-      <form onSubmit={handleSubmit(() => mutation.mutate())}>
+      <form onSubmit={handleSubmit((data) => mutation.mutate(data))}>
         <Modal.Body className="">
           <div className="w-full flex flex-col items-center justify-start">
             <div className="w-full p-4 grid grid-cols-3">

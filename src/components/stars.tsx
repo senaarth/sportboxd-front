@@ -19,8 +19,8 @@ const sizeVariants = {
     size: "w-[6px] h-[6px]",
   },
   xs: {
-    gap: "",
-    size: "",
+    gap: "gap-0.5",
+    size: "w-2.5 h-2.5",
   },
   sm: {
     gap: "",
@@ -68,7 +68,7 @@ export function Stars({ color, number, onStarClick, size }: StarsProps) {
                 "w-[50%] h-full transition-all",
                 item + 0.5 <= starsToHighlightNum
                   ? colorVariants[color]
-                  : "bg-neutral-800",
+                  : "bg-neutral-600",
                 onStarClick ? hoverVariants[color] : "cursor-default"
               )}
               onClick={() => (onStarClick ? onStarClick(item + 0.5) : null)}
@@ -87,7 +87,7 @@ export function Stars({ color, number, onStarClick, size }: StarsProps) {
                 "w-[50%] h-full transition-all",
                 item + 1 <= starsToHighlightNum
                   ? colorVariants[color]
-                  : "bg-neutral-800",
+                  : "bg-neutral-600",
                 onStarClick ? hoverVariants[color] : "cursor-default"
               )}
               onClick={() => (onStarClick ? onStarClick(item + 1) : null)}

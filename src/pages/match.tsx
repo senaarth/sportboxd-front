@@ -55,6 +55,7 @@ export default function MatchPage() {
     data: match,
     error,
     isLoading,
+    refetch: refetchMatch,
   } = useQuery<Match>(["match", params.id], async () => {
     if (!params.id) return {};
     return await getMatchById(params.id);
@@ -63,6 +64,7 @@ export default function MatchPage() {
     data: ratings,
     error: ratingsError,
     isLoading: isLoadingRatings,
+    refetch: refetchRatings,
   } = useQuery<Rating[]>(["ratings", params.id], async () => {
     if (!params.id) return [];
     return await getMatchRatings(params.id);
@@ -113,8 +115,8 @@ export default function MatchPage() {
             color="lime"
             number={0}
             onStarClick={(value) => {
-              setRatingModalOpen(true);
               setRatingValue(value);
+              setRatingModalOpen(true);
             }}
             size="lg"
           />
@@ -163,10 +165,11 @@ export default function MatchPage() {
                     className="w-full bg-neutral-900 border border-neutral-800 rounded-md text-neutral-200 p-4"
                   >
                     <div className="w-full flex items-center justify-between">
-                      <div>
+                      <div className="flex flex-col items-start justify-start gap-0.5">
                         <p className="text-base font-semibold">
                           {rating.title}
                         </p>
+                        <Stars color="lime" number={rating.rating} size="xs" />
                       </div>
                       <div className="flex flex-col items-end justify-center">
                         <p className="text-xs font-semibold">{rating.author}</p>
@@ -175,7 +178,7 @@ export default function MatchPage() {
                         </p>
                       </div>
                     </div>
-                    <p className="text-sm mt-4">{rating.content}</p>
+                    <p className="text-sm mt-4">{rating.comment}</p>
                   </div>
                 ))
               ) : (
@@ -194,12 +197,20 @@ export default function MatchPage() {
           )}
         </div>
       </div>
-      <RatingModal
-        defaultValue={ratingValue}
-        isOpen={isRatingModalOpen}
-        match={match}
-        onClose={() => setRatingModalOpen(false)}
-      />
+      {isRatingModalOpen ? (
+        <RatingModal
+          defaultValue={ratingValue}
+          isOpen={isRatingModalOpen}
+          match={match}
+          onClose={() => setRatingModalOpen(false)}
+          onSubmitError={() => {}}
+          onSubmitSuccess={() => {
+            setRatingModalOpen(false);
+            refetchRatings();
+            refetchMatch();
+          }}
+        />
+      ) : null}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
-import { formatDateLabel } from "../utils/date";
+import { Stars } from "./stars";
 
 interface MatchCardProps {
   matchId: string;
@@ -21,7 +21,6 @@ export function MatchCard({
   awayScore,
   avgRating,
   ratingsNum,
-  date,
 }: MatchCardProps) {
   const navigate = useNavigate();
 
@@ -78,10 +77,11 @@ export function MatchCard({
         </div>
       </div>
       <div className="w-full flex items-center justify-between">
-        <p className="text-sm text-neutral-100">{avgRating}/5</p>
-        <p className="text-neutral-500 text-xs">
-          {formatDateLabel(date)} · {ratingsNum} avaliações
-        </p>
+        <div className="flex items-center gap-1">
+          <Stars color="lime" number={avgRating} size="xs" />
+          <p className="text-xs text-neutral-100">{avgRating}/5</p>
+        </div>
+        <p className="text-neutral-500 text-xs">{ratingsNum} avaliações</p>
       </div>
     </button>
   );

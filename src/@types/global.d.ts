@@ -25,7 +25,8 @@ declare global {
     matchId: string;
     title: string;
     author: string;
-    content: string;
+    comment: string;
+    rating: number;
   };
 
   type RemoteMatch = {
@@ -53,5 +54,6 @@ declare global {
     title: string;
     author: string;
     content: string;
+    rating: number;
   };
 }

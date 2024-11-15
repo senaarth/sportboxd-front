@@ -15,7 +15,7 @@ async function getMatches(since: string, league: string) {
         awayTeam: match.away_team,
         awayScore: match.away_score,
         ratingsNum: match.ratings_num,
-        avgRating: match.avg_rating,
+        avgRating: match.avg_rating.toFixed(1),
         ratingProportion: {
           "1": match.count_by_rating["1"] / match.ratings_num,
           "2": match.count_by_rating["2"] / match.ratings_num,
@@ -44,7 +44,7 @@ async function getMatchById(matchId: string) {
         awayTeam: match.away_team,
         awayScore: match.away_score,
         ratingsNum: match.ratings_num,
-        avgRating: match.avg_rating,
+        avgRating: match.avg_rating.toFixed(1),
         ratingProportion: {
           "1": match.count_by_rating["1"] / match.ratings_num,
           "2": match.count_by_rating["2"] / match.ratings_num,
@@ -82,13 +82,11 @@ async function postRating(data: {
   rating: number;
   author: string;
   comment: string;
+  match_id: string;
 }) {
-  await axios
-    .post(`${baseUrl}/matches`, data)
-    .then(() => {})
-    .catch(() => {
-      throw new Error("Erro ao publicar avaliação");
-    });
+  await axios.post(`${baseUrl}/ratings/`, data).catch(() => {
+    throw new Error("Erro ao publicar avaliação");
+  });
 }
 
 export { getMatches, getMatchById, getMatchRatings, postRating };
