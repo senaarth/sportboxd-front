@@ -36,6 +36,14 @@ declare global {
     away_team: string;
     away_score: number;
     ratings_num: number;
+    avg_rating: number;
+    count_by_rating: {
+      "1": number;
+      "2": number;
+      "3": number;
+      "4": number;
+      "5": number;
+    };
   };
 
   type RemoteRating = {

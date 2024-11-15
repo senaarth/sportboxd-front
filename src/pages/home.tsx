@@ -15,7 +15,7 @@ type League = {
 
 const AVAILABLE_LEAGUES: League[] = [
   {
-    code: "BRA",
+    code: "BSA",
     sport: "soccer",
     label: "Brasileirão - Série A",
   },

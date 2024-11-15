@@ -2,9 +2,9 @@ import axios from "axios";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function getMatches(since: string, country: string) {
+async function getMatches(since: string, league: string) {
   return await axios
-    .get(`${baseUrl}/matches`, { params: { since, country } })
+    .get(`${baseUrl}/matches/`, { params: { since, league } })
     .then(({ data }) => {
       return data.map((match: RemoteMatch) => ({
         ...match,
@@ -15,11 +15,48 @@ async function getMatches(since: string, country: string) {
         awayTeam: match.away_team,
         awayScore: match.away_score,
         ratingsNum: match.ratings_num,
+        avgRating: match.avg_rating,
+        ratingProportion: {
+          "1": match.count_by_rating["1"] / match.ratings_num,
+          "2": match.count_by_rating["2"] / match.ratings_num,
+          "3": match.count_by_rating["3"] / match.ratings_num,
+          "4": match.count_by_rating["4"] / match.ratings_num,
+          "5": match.count_by_rating["5"] / match.ratings_num,
+        },
       }));
     })
     .catch(() => {
       // throw new Error("Erro ao buscar as partidas");
       return [];
+    });
+}
+
+async function getMatchById(matchId: string) {
+  return await axios
+    .get(`${baseUrl}/matches/${matchId}`)
+    .then(({ data: match }) => {
+      return {
+        ...match,
+        matchId: match._id,
+        date: new Date(match.date),
+        homeTeam: match.home_team,
+        homeScore: match.home_score,
+        awayTeam: match.away_team,
+        awayScore: match.away_score,
+        ratingsNum: match.ratings_num,
+        avgRating: match.avg_rating,
+        ratingProportion: {
+          "1": match.count_by_rating["1"] / match.ratings_num,
+          "2": match.count_by_rating["2"] / match.ratings_num,
+          "3": match.count_by_rating["3"] / match.ratings_num,
+          "4": match.count_by_rating["4"] / match.ratings_num,
+          "5": match.count_by_rating["5"] / match.ratings_num,
+        },
+      };
+    })
+    .catch(() => {
+      // throw new Error("Erro ao buscar partida");
+      return {};
     });
 }
 
@@ -54,4 +91,4 @@ async function postRating(data: {
     });
 }
 
-export { getMatches, getMatchRatings, postRating };
+export { getMatches, getMatchById, getMatchRatings, postRating };

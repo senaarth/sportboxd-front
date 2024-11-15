@@ -5,7 +5,7 @@ import { Loading } from "../components/loading";
 import { Stars } from "../components/stars";
 import { RatingModal } from "../components/rating-modal";
 import { useState } from "react";
-import { getMatchRatings } from "../api";
+import { getMatchById, getMatchRatings } from "../api";
 
 const RatingProportionComponent = ({
   rating,
@@ -46,7 +46,7 @@ const CrestComponent = ({ team }: { team: string }) => {
   );
 };
 
-export default function Match() {
+export default function MatchPage() {
   const params = useParams();
   const navigate = useNavigate();
   const [isRatingModalOpen, setRatingModalOpen] = useState<boolean>(false);
@@ -55,24 +55,9 @@ export default function Match() {
     data: match,
     error,
     isLoading,
-  } = useQuery<Match>(["match", params.id], () => {
-    return {
-      date: new Date(),
-      matchId: "1",
-      homeTeam: "Flamengo",
-      homeScore: 0,
-      awayTeam: "Vasco",
-      awayScore: 10,
-      avgRating: 4.5,
-      ratingsNum: 10000,
-      ratingProportion: {
-        "1": 0.05,
-        "2": 0.05,
-        "3": 0.1,
-        "4": 0.2,
-        "5": 0.7,
-      },
-    };
+  } = useQuery<Match>(["match", params.id], async () => {
+    if (!params.id) return {};
+    return await getMatchById(params.id);
   });
   const {
     data: ratings,
@@ -85,13 +70,13 @@ export default function Match() {
 
   if (isLoading || error || !match)
     return (
-      <div className="w-full h-svh flex items-center justify-center bg-neutral-950">
+      <div className="w-full min-h-svh flex items-center justify-center bg-neutral-950">
         <Loading />
       </div>
     );
 
   return (
-    <div className="w-full h-svh bg-neutral-950">
+    <div className="w-full min-h-svh bg-neutral-950">
       <div className="w-full flex items-center justify-center px-4 py-6 bg-neutral-900">
         <div className="w-full max-w-4xl flex flex-col items-start justify-start gap-4">
           <button
