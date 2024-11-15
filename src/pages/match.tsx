@@ -27,20 +27,17 @@ const RatingProportionComponent = ({
   );
 };
 
-const CrestComponent = ({ team }: { team: string }) => {
+const CrestComponent = ({ league, team }: { league: string; team: string }) => {
   return (
     <div className="w-full flex flex-col items-center px-3 gap-2">
-      <object
+      <img
         className="h-11"
-        data={`https://api.sportboxd.com/crests/${team}.svg`}
-        type="image/svg"
-      >
-        <img
-          className="h-11"
-          src="/crest_fallback.png"
-          alt={`escudo do time da casa, ${team}`}
-        />
-      </object>
+        src={`/crests/${league}/${team}.png`}
+        alt={`escudo do time da casa, ${team}`}
+        onError={(e) => {
+          (e.target as HTMLImageElement).src = "/crest_fallback.png";
+        }}
+      />
       <p className="text-base text-neutral-200">{team}</p>
     </div>
   );
@@ -94,7 +91,7 @@ export default function MatchPage() {
             Voltar
           </button>
           <div className="w-full p-4 grid grid-cols-3">
-            <CrestComponent team={match.homeTeam} />
+            <CrestComponent league={match.league} team={match.homeTeam} />
             <div className="flex flex-col items-center gap-2">
               <p className="text-sm text-neutral-500">
                 {formatDateLabel(match.date)}
@@ -104,7 +101,7 @@ export default function MatchPage() {
               </p>
               <p className="text-xs text-neutral-200">Encerrado</p>
             </div>
-            <CrestComponent team={match.awayTeam} />
+            <CrestComponent league={match.league} team={match.awayTeam} />
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ declare global {
     homeScore: number;
     awayTeam: string;
     awayScore: number;
+    league: string;
     ratingsNum: number;
     ratingProportion: {
       "1": number;

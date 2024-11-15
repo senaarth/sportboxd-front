@@ -15,7 +15,7 @@ async function getMatches(since: string, league: string) {
         awayTeam: match.away_team,
         awayScore: match.away_score,
         ratingsNum: match.ratings_num,
-        avgRating: match.avg_rating.toFixed(1),
+        avgRating: match.avg_rating.toFixed(1) || 0,
         ratingProportion: {
           "1": match.count_by_rating["1"] / match.ratings_num,
           "2": match.count_by_rating["2"] / match.ratings_num,
@@ -44,7 +44,7 @@ async function getMatchById(matchId: string) {
         awayTeam: match.away_team,
         awayScore: match.away_score,
         ratingsNum: match.ratings_num,
-        avgRating: match.avg_rating.toFixed(1),
+        avgRating: match.avg_rating.toFixed(1) || 0,
         ratingProportion: {
           "1": match.count_by_rating["1"] / match.ratings_num,
           "2": match.count_by_rating["2"] / match.ratings_num,

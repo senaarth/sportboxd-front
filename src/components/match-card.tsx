@@ -11,6 +11,7 @@ interface MatchCardProps {
   avgRating: number;
   ratingsNum: number;
   date: Date;
+  league: string;
 }
 
 export function MatchCard({
@@ -21,6 +22,7 @@ export function MatchCard({
   awayScore,
   avgRating,
   ratingsNum,
+  league,
 }: MatchCardProps) {
   const navigate = useNavigate();
 
@@ -32,17 +34,14 @@ export function MatchCard({
     >
       <div className="w-full flex flex-col gap-4">
         <div className="w-full flex flex-row items-center justify-start gap-1">
-          <object
-            className="h-5"
-            data={`https://api.sportboxd.com/crests/${homeTeam}.svg`}
-            type="image/svg"
-          >
-            <img
-              className="h-5"
-              src="crest_fallback.png"
-              alt={`escudo do time da casa, ${homeTeam}`}
-            />
-          </object>
+          <img
+            className="h-11"
+            src={`/crests/${league}/${homeTeam}.png`}
+            alt={`escudo do time da casa, ${homeTeam}`}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/crest_fallback.png";
+            }}
+          />
           <p className="text-base text-neutral-100">{homeTeam}</p>
           <p
             className={twMerge(
@@ -54,17 +53,14 @@ export function MatchCard({
           </p>
         </div>
         <div className="w-full flex flex-row items-center justify-start gap-1">
-          <object
-            className="h-5"
-            data={`https://api.sportboxd.com/crests/${awayTeam}.svg`}
-            type="image/svg"
-          >
-            <img
-              className="h-5"
-              src="crest_fallback.png"
-              alt={`escudo do time visitante, ${awayTeam}`}
-            />
-          </object>
+          <img
+            className="h-11"
+            src={`/crests/${league}/${awayTeam}.png`}
+            alt={`escudo do time da casa, ${awayTeam}`}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/crest_fallback.png";
+            }}
+          />
           <p className="text-base text-neutral-100">{awayTeam}</p>
           <p
             className={twMerge(
