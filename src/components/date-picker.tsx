@@ -106,7 +106,7 @@ export function DatePicker({ defaultValue, onDatePick }: DatePickerProps) {
     <div className="w-full flex flex-col">
       <div>
         <button
-          className="w-full h-10 flex items-center justify-center gap-2 border border-neutral-800 bg-neutral-900 rounded-md hover:brightness-150"
+          className="w-full h-10 flex items-center justify-center gap-2 border border-neutral-800 bg-neutral-900 rounded-md hover:bg-neutral-800 hover:border-neutral-700"
           onClick={() => setIsExpanded(!isExpanded)}
           type="button"
         >

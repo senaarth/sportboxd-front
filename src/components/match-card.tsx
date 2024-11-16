@@ -28,7 +28,7 @@ export function MatchCard({
 
   return (
     <button
-      className="w-full rounded-md flex flex-col gap-4 p-4 border border-neutral-800 bg-neutral-900 hover:brightness-150"
+      className="w-full rounded-md flex flex-col gap-4 p-4 border border-neutral-800 bg-neutral-900 hover:border-neutral-700 hover:bg-neutral-800"
       onClick={() => navigate(`/partidas/${matchId}`)}
       type="button"
     >
