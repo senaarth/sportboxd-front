@@ -28,25 +28,17 @@ const AVAILABLE_LEAGUES: League[] = [
 
 export default function Home() {
   const [selectedLeague, selectLeague] = useState<League>(AVAILABLE_LEAGUES[0]);
-  const [selectedStartDate, selectStartDate] = useState<Date>(
-    new Date(new Date().getTime() - 60 * 60 * 24 * 7 * 1000)
-  );
-  const [selectedEndDate, selectEndDate] = useState<Date>(new Date());
+  const [selectedDate, selectDate] = useState<Date>(new Date());
   const {
     isLoading,
     error,
     data: matches,
   } = useQuery<Match[]>(
-    [
-      "matches",
-      selectedLeague.code,
-      selectedStartDate.toLocaleDateString("pt-BR"),
-      selectedEndDate.toLocaleDateString("pt-BR"),
-    ],
+    ["matches", selectedLeague.code, selectedDate.toLocaleDateString("pt-BR")],
     async () => {
       const results = await getMatches(
-        selectedStartDate.toLocaleDateString("pt-BR"),
-        selectedEndDate.toLocaleDateString("pt-BR"),
+        selectedDate,
+        selectedDate,
         selectedLeague.code
       );
       return results;
@@ -72,19 +64,21 @@ export default function Home() {
           />
         ))}
       </div>
-      <div className="w-full max-w-4xl flex flex-col gap-1.5 items-center md:flex-row md:gap-4 md:items-start">
+      {/* <div className="w-full max-w-4xl flex flex-col gap-1.5 items-center md:flex-row md:gap-4 md:items-start"> */}
+      <div className="w-full max-w-4xl">
         <DatePicker
-          defaultValue={selectedStartDate}
-          onDatePick={(date: Date) => selectStartDate(date)}
+          defaultValue={selectedDate}
+          onDatePick={(date: Date) => selectDate(date)}
         />
-        <p className="text-sm text-neutral-200 text-center md:h-10 md:leading-10">
+      </div>
+      {/* <p className="text-sm text-neutral-200 text-center md:h-10 md:leading-10">
           até
         </p>
         <DatePicker
           defaultValue={selectedEndDate}
           onDatePick={(date: Date) => selectEndDate(date)}
         />
-      </div>
+      </div> */}
       {isLoading ? (
         <Loading />
       ) : (

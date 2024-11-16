@@ -209,7 +209,7 @@ export function RatingModal({
         </Modal.Body>
         <Modal.Footer className="gap-2">
           <button
-            className="ml-auto rounded-md hover:brightness-150 transition-all bg-neutral-900 text-sm p-3 text-neutral-200"
+            className="ml-auto rounded-md transition-all bg-neutral-900 hover:bg-neutral-800 text-sm p-3 text-neutral-200"
             onClick={() => onClose()}
             type="button"
           >

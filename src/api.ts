@@ -1,10 +1,18 @@
 import axios from "axios";
 
+import { getNextDay } from "./utils/date";
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function getMatches(since: string, until: string, league: string) {
+async function getMatches(since: Date, until: Date, league: string) {
   return await axios
-    .get(`${baseUrl}/matches/`, { params: { since, until, league } })
+    .get(`${baseUrl}/matches/`, {
+      params: {
+        since: since.toLocaleDateString("pt-BR"),
+        until: getNextDay(until).toLocaleDateString("pt-BR"),
+        league,
+      },
+    })
     .then(({ data }) => {
       return data.map((match: RemoteMatch) => ({
         ...match,
