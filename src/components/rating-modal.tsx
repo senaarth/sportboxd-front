@@ -11,10 +11,10 @@ import { formatDateLabel } from "../utils/date";
 import { Input } from "./input";
 import { twMerge } from "tailwind-merge";
 import { postRating } from "../api";
+import { useAuth } from "@/contexts/auth";
 
 const ratingFormSchema = z.object({
   rating: z.number(),
-  author: z.string().min(1, "Campo obrigatório"),
   title: z.string().min(1, "Campo obrigatório"),
   comment: z.string(),
 });
@@ -108,16 +108,23 @@ export function RatingModal({
   onSubmitError,
   onSubmitSuccess,
 }: RatingModalProps) {
+  const { isAuthenticated, openLoginModal, user } = useAuth();
   const mutation = useMutation({
     mutationFn: async (data: {
       rating: number;
-      author: string;
       title: string;
       comment: string;
     }) => {
+      if (!user?.email) {
+        openLoginModal();
+        onClose();
+        return;
+      }
+
       await postRating({
         ...data,
         match_id: match.matchId,
+        author: user.displayName || user.email,
       });
     },
     onError: onSubmitError,
@@ -137,9 +144,11 @@ export function RatingModal({
 
   useEffect(() => reset(), [isOpen, reset]);
 
+  if (!isAuthenticated) openLoginModal();
+
   return (
     <Modal
-      show={isOpen}
+      show={isOpen && isAuthenticated}
       size="lg"
       onClose={() => onClose()}
       popup
@@ -178,13 +187,6 @@ export function RatingModal({
               Toque em uma estrela para avaliar
             </p>
             <div className="w-full flex flex-col items-center justify-start gap-4 mt-4">
-              <Input
-                error={errors.author?.message}
-                id="author"
-                label="Seu nome ou apelido"
-                placeholder="Nome ou apelido"
-                {...register("author")}
-              />
               <Input
                 error={errors.title?.message}
                 id="title"
