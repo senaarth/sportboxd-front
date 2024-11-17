@@ -19,7 +19,7 @@ import { FirebaseError } from "firebase/app";
 import { SignUpModal } from "../components/signup-modal";
 import { LoginModal } from "../components/login-modal";
 import { useToast } from "../hooks/use-toast";
-import { Loading } from "@/components/loading";
+import { LoadingScreen } from "@/components/loading-screen";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -110,18 +110,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         handleLogout,
       }}
     >
-      {isLoading ? (
-        <div className="w-full h-svh flex flex-col gap-2 items-center justify-center">
-          <img
-            alt="Logo sportboxd, imagem com nome do site escrito"
-            className="h-5"
-            src="sportboxd.svg"
-          />
-          <Loading size="xs" />
-        </div>
-      ) : (
-        children
-      )}
+      {isLoading ? <LoadingScreen /> : children}
       <SignUpModal
         isOpen={isSignUpOpen}
         onClose={() => setSignUpOpen(false)}

@@ -6,6 +6,8 @@ import { Stars } from "../components/stars";
 import { RatingModal } from "../components/rating-modal";
 import { useState } from "react";
 import { getMatchById, getMatchRatings } from "../api";
+import { LoadingScreen } from "@/components/loading-screen";
+import { ShareRatingModal } from "@/components/share-rating-modal";
 
 const RatingProportionComponent = ({
   rating,
@@ -47,6 +49,7 @@ export default function MatchPage() {
   const params = useParams();
   const navigate = useNavigate();
   const [isRatingModalOpen, setRatingModalOpen] = useState<boolean>(false);
+  const [ratingToShare, setRatingToShare] = useState<Rating | null>(null);
   const [ratingValue, setRatingValue] = useState<number>(0);
   const {
     data: match,
@@ -67,12 +70,7 @@ export default function MatchPage() {
     return await getMatchRatings(params.id);
   });
 
-  if (isLoading || error || !match)
-    return (
-      <div className="w-full min-h-svh flex items-center justify-center bg-neutral-950">
-        <Loading />
-      </div>
-    );
+  if (isLoading || error || !match) return <LoadingScreen />;
 
   return (
     <div className="w-full min-h-svh bg-neutral-950">
@@ -176,6 +174,19 @@ export default function MatchPage() {
                       </div>
                     </div>
                     <p className="text-sm mt-4">{rating.comment}</p>
+                    <div className="w-full flex items-center justify-between mt-2">
+                      <button
+                        className="p-1 rounded hover:bg-neutral-800 ml-auto"
+                        onClick={() => setRatingToShare(rating)}
+                        type="button"
+                      >
+                        <img
+                          className="w-4 h-4"
+                          src="/icons/share.svg"
+                          alt="ícone de compartilhar"
+                        />
+                      </button>
+                    </div>
                   </div>
                 ))
               ) : (
@@ -206,6 +217,14 @@ export default function MatchPage() {
             refetchRatings();
             refetchMatch();
           }}
+        />
+      ) : null}
+      {ratingToShare ? (
+        <ShareRatingModal
+          isOpen={!!ratingToShare}
+          onClose={() => setRatingToShare(null)}
+          rating={ratingToShare}
+          match={match}
         />
       ) : null}
     </div>
