@@ -71,9 +71,9 @@ async function getMatchById(matchId: string) {
     });
 }
 
-async function getMatchRatings(matchId: string) {
+async function getMatchRatings(matchId: string, ratingId: string | null) {
   return await axios
-    .get(`${baseUrl}/ratings/${matchId}`)
+    .get(`${baseUrl}/ratings/${matchId}?first_rating_id=${ratingId}`)
     .then(({ data }) => {
       return data.map((rating: RemoteRating) => ({
         ...rating,
