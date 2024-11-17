@@ -72,8 +72,10 @@ async function getMatchById(matchId: string) {
 }
 
 async function getMatchRatings(matchId: string, ratingId: string | null) {
+  const ratingIdParam = ratingId ? `?first_rating_id=${ratingId}` : "";
+
   return await axios
-    .get(`${baseUrl}/ratings/${matchId}?first_rating_id=${ratingId}`)
+    .get(`${baseUrl}/ratings/${matchId}` + ratingIdParam)
     .then(({ data }) => {
       return data.map((rating: RemoteRating) => ({
         ...rating,

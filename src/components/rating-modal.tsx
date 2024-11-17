@@ -144,7 +144,13 @@ export function RatingModal({
 
   useEffect(() => reset(), [isOpen, reset]);
 
-  if (!isAuthenticated) openLoginModal();
+  useEffect(() => {
+    if (!isOpen) return;
+    if (!isAuthenticated) {
+      onClose();
+      openLoginModal();
+    }
+  }, [isOpen]);
 
   return (
     <Modal
