@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DatePicker } from "../components/date-picker";
 import { LeagueChip } from "../components/league-chip";
@@ -27,13 +27,19 @@ const AVAILABLE_LEAGUES: League[] = [
 ];
 
 export default function Home() {
-  const [selectedLeague, selectLeague] = useState<League>(AVAILABLE_LEAGUES[0]);
-  const [selectedDate, selectDate] = useState<Date>(new Date());
+  const localDate = localStorage.getItem("sportboxd:selected_date");
+  const localLeague = localStorage.getItem("sportboxd:selected_league");
+  const [selectedLeague, selectLeague] = useState<League>(
+    localLeague ? JSON.parse(localLeague) : AVAILABLE_LEAGUES[0]
+  );
+  const [selectedDate, selectDate] = useState<Date>(
+    localDate ? new Date(localDate) : new Date()
+  );
   const {
     isLoading,
     error,
-    data: matches,
-  } = useQuery<Match[]>(
+    data: matchesData,
+  } = useQuery<{ matches: Match[]; totalCount: number }>(
     ["matches", selectedLeague.code, selectedDate.toLocaleDateString("pt-BR")],
     async () => {
       const results = await getMatches(
@@ -44,6 +50,17 @@ export default function Home() {
       return results;
     }
   );
+
+  useEffect(() => {
+    localStorage.setItem(
+      "sportboxd:selected_date",
+      selectedDate.toLocaleDateString()
+    );
+    localStorage.setItem(
+      "sportboxd:selected_league",
+      JSON.stringify(selectedLeague)
+    );
+  }, [selectedDate, selectedLeague]);
 
   return (
     <div className="bg-neutral-950 w-full min-h-svh flex flex-col items-center justify-start px-4 py-5 gap-5">
@@ -59,7 +76,7 @@ export default function Home() {
           <LeagueChip
             key={league.code}
             {...league}
-            isSelected={league === selectedLeague}
+            isSelected={league.code === selectedLeague.code}
             onClick={() => selectLeague(league)}
           />
         ))}
@@ -85,8 +102,8 @@ export default function Home() {
         <>
           {error ? null : (
             <div className="w-full max-w-4xl flex flex-col items-center justify-start gap-2">
-              {matches?.length ? (
-                matches.map((match) => (
+              {matchesData?.matches.length ? (
+                matchesData.matches.map((match) => (
                   <MatchCard key={match.matchId} {...match} />
                 ))
               ) : (

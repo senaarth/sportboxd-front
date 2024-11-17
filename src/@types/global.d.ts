@@ -39,6 +39,7 @@ declare global {
     away_score: number;
     ratings_num: number;
     avg_rating: number;
+    league: string;
     count_by_rating: {
       "1": number;
       "2": number;

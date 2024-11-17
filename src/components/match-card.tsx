@@ -33,9 +33,9 @@ export function MatchCard({
       type="button"
     >
       <div className="w-full flex flex-col gap-4">
-        <div className="w-full flex flex-row items-center justify-start gap-1">
+        <div className="w-full flex flex-row items-center justify-start gap-1.5">
           <img
-            className="h-11"
+            className="h-11 w-11 object-contain p-0.5"
             src={`/crests/${league}/${homeTeam}.png`}
             alt={`escudo do time da casa, ${homeTeam}`}
             onError={(e) => {
@@ -54,7 +54,7 @@ export function MatchCard({
         </div>
         <div className="w-full flex flex-row items-center justify-start gap-1">
           <img
-            className="h-11"
+            className="h-11 w-11 object-contain p-0.5"
             src={`/crests/${league}/${awayTeam}.png`}
             alt={`escudo do time da casa, ${awayTeam}`}
             onError={(e) => {

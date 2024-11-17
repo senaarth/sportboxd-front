@@ -13,29 +13,32 @@ async function getMatches(since: Date, until: Date, league: string) {
         league,
       },
     })
-    .then(({ data }) => {
-      return data.map((match: RemoteMatch) => ({
-        ...match,
-        matchId: match._id,
-        date: new Date(match.date),
-        homeTeam: match.home_team,
-        homeScore: match.home_score,
-        awayTeam: match.away_team,
-        awayScore: match.away_score,
-        ratingsNum: match.ratings_num,
-        avgRating: match.avg_rating.toFixed(1) || 0,
-        ratingProportion: {
-          "1": match.count_by_rating["1"] / match.ratings_num,
-          "2": match.count_by_rating["2"] / match.ratings_num,
-          "3": match.count_by_rating["3"] / match.ratings_num,
-          "4": match.count_by_rating["4"] / match.ratings_num,
-          "5": match.count_by_rating["5"] / match.ratings_num,
-        },
-      }));
+    .then(({ data: { matches, total_count } }) => {
+      return {
+        matches: matches.map((match: RemoteMatch) => ({
+          ...match,
+          matchId: match._id,
+          date: new Date(match.date),
+          homeTeam: match.home_team,
+          homeScore: match.home_score,
+          awayTeam: match.away_team,
+          awayScore: match.away_score,
+          ratingsNum: match.ratings_num,
+          avgRating: match.avg_rating ? match.avg_rating.toFixed(1) : 0,
+          ratingProportion: {
+            "1": match.count_by_rating["1"] / match.ratings_num,
+            "2": match.count_by_rating["2"] / match.ratings_num,
+            "3": match.count_by_rating["3"] / match.ratings_num,
+            "4": match.count_by_rating["4"] / match.ratings_num,
+            "5": match.count_by_rating["5"] / match.ratings_num,
+          },
+        })),
+        totalCount: total_count,
+      };
     })
     .catch(() => {
       // throw new Error("Erro ao buscar as partidas");
-      return [];
+      return { matches: [], totalCount: 0 };
     });
 }
 
@@ -52,7 +55,7 @@ async function getMatchById(matchId: string) {
         awayTeam: match.away_team,
         awayScore: match.away_score,
         ratingsNum: match.ratings_num,
-        avgRating: match.avg_rating.toFixed(1) || 0,
+        avgRating: match.avg_rating ? match.avg_rating.toFixed(1) : 0,
         ratingProportion: {
           "1": match.count_by_rating["1"] / match.ratings_num,
           "2": match.count_by_rating["2"] / match.ratings_num,
