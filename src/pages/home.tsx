@@ -6,6 +6,8 @@ import { useQuery } from "react-query";
 import { MatchCard } from "../components/match-card";
 import { Loading } from "../components/loading";
 import { getMatches } from "../api";
+import { useAuth } from "../contexts/auth";
+import { twMerge } from "tailwind-merge";
 
 type League = {
   code: string;
@@ -29,6 +31,7 @@ const AVAILABLE_LEAGUES: League[] = [
 export default function Home() {
   const localDate = localStorage.getItem("sportboxd:selected_date");
   const localLeague = localStorage.getItem("sportboxd:selected_league");
+  const { isAuthenticated, handleLogout, openLoginModal } = useAuth();
   const [selectedLeague, selectLeague] = useState<League>(
     localLeague ? JSON.parse(localLeague) : AVAILABLE_LEAGUES[0]
   );
@@ -64,12 +67,22 @@ export default function Home() {
 
   return (
     <div className="bg-neutral-950 w-full min-h-svh flex flex-col items-center justify-start px-4 py-5 gap-5">
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl flex items-center justify-between">
         <img
           alt="Logo sportboxd, imagem com nome do site escrito"
           className="h-7"
           src="sportboxd.svg"
         />
+        <button
+          className={twMerge(
+            "text-sm px-2 py-1",
+            isAuthenticated ? "text-neutral-200" : "text-lime-500"
+          )}
+          onClick={isAuthenticated ? handleLogout : openLoginModal}
+          type="button"
+        >
+          {isAuthenticated ? "Sair" : "Entrar"}
+        </button>
       </div>
       <div className="flex flex-row items-center justify-start w-full max-w-4xl">
         {AVAILABLE_LEAGUES.map((league) => (

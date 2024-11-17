@@ -11,18 +11,26 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@firebasegen/default-connector": "link:dataconnect-generated/js/default-connector",
     "@hookform/resolvers": "^3.9.1",
+    "@radix-ui/react-toast": "^1.2.2",
+    "@types/firebase": "^3.2.3",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
+    "class-variance-authority": "^0.7.0",
+    "firebase": "^11.0.2",
     "flowbite-react": "^0.10.2",
+    "lucide-react": "^0.460.0",
     "postcss": "^8.4.47",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.2",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.28.0",
+    "shadcn": "^2.1.6",
     "tailwind-merge": "^2.5.4",
     "tailwindcss": "^3.4.14",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
   },
   "devDependencies": {
