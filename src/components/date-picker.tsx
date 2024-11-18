@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Datepicker as FlowbiteDatepicker } from "flowbite-react";
 import type { CustomFlowbiteTheme } from "flowbite-react";
 import { formatDateLabel } from "../utils/date";
@@ -34,10 +34,10 @@ const customTheme: CustomFlowbiteTheme["datepicker"] = {
     footer: {
       base: "mt-2 flex space-x-2",
       button: {
-        base: "w-full rounded-md px-5 py-2 text-center text-sm font-medium focus:ring-4 focus:ring-lime-400",
-        today: "bg-lime-700 text-white focus:ring-0 hover:brightness-75",
+        base: "w-full rounded-md px-5 py-2 text-center text-sm font-medium focus:ring-2 focus:ring-lime-400",
+        today: "bg-lime-500 text-neutral-950 hover:ring-2 hover:ring-lime-500",
         clear:
-          "border border-neutral-600 bg-neutral-800 text-white hover:bg-lime-700 hover:ring-2 hover:ring-lime-400",
+          "border border-neutral-600 bg-neutral-800 text-white hover:ring-2 hover:ring-neutral-600",
       },
     },
   },
@@ -95,12 +95,14 @@ const customTheme: CustomFlowbiteTheme["datepicker"] = {
 
 interface DatePickerProps {
   defaultValue?: Date;
-  onDatePick: (date: Date) => void;
+  onDatePick: (date?: Date) => void;
 }
 
 export function DatePicker({ defaultValue, onDatePick }: DatePickerProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [selectedDate, selectDate] = useState<Date>(defaultValue || new Date());
+  const [selectedDate, selectDate] = useState<Date | undefined>(defaultValue);
+
+  useEffect(() => selectDate(defaultValue), [defaultValue]);
 
   return (
     <div className="w-full flex flex-col">
@@ -110,7 +112,9 @@ export function DatePicker({ defaultValue, onDatePick }: DatePickerProps) {
           onClick={() => setIsExpanded(!isExpanded)}
           type="button"
         >
-          <p className="text-neutral-200">{formatDateLabel(selectedDate)}</p>
+          <p className="text-neutral-200">
+            {selectedDate ? formatDateLabel(selectedDate) : "Selecionar Data"}
+          </p>
           <img
             alt="Ícone de seta indicando que o botão expande a visualização"
             className={twMerge(
@@ -127,20 +131,18 @@ export function DatePicker({ defaultValue, onDatePick }: DatePickerProps) {
           )}
         >
           <FlowbiteDatepicker
-            defaultValue={defaultValue}
             inline
             language="pt-BR"
+            labelClearButton="Limpar"
             labelTodayButton="Hoje"
             maxDate={new Date()}
             onChange={(date) => {
-              if (!date) return;
-              selectDate(date);
-              onDatePick(date);
+              selectDate(date || undefined);
+              onDatePick(date || undefined);
+              if (!date) setIsExpanded(false);
             }}
             theme={customTheme}
             value={selectedDate}
-            showClearButton={false}
-            showTodayButton={false}
           />
         </div>
       </div>

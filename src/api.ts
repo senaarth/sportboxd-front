@@ -4,13 +4,22 @@ import { getNextDay } from "./utils/date";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-async function getMatches(since: Date, until: Date, league: string) {
+async function getMatches(
+  since: Date | undefined,
+  until: Date | undefined,
+  league: string,
+  currentPage: number
+) {
   return await axios
     .get(`${baseUrl}/matches/`, {
       params: {
-        since: since.toLocaleDateString("pt-BR"),
-        until: getNextDay(until).toLocaleDateString("pt-BR"),
+        since: since?.toLocaleDateString("pt-BR"),
+        until: until
+          ? getNextDay(until).toLocaleDateString("pt-BR")
+          : undefined,
         league,
+        skip: 15 * currentPage,
+        limit: 15,
       },
     })
     .then(({ data: { matches, total_count } }) => {
