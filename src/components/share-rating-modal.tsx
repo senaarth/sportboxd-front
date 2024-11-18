@@ -140,6 +140,7 @@ export function ShareRatingModal({
                 toast({
                   title: "Link copiado com sucesso!",
                 });
+                onClose();
               }}
               type="button"
             >
