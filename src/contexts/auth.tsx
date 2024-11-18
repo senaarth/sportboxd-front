@@ -12,6 +12,7 @@ import {
   updateProfile,
   signOut,
   onAuthStateChanged,
+  sendEmailVerification,
 } from "firebase/auth";
 
 import { auth } from "../lib/firebase";
@@ -20,6 +21,7 @@ import { SignUpModal } from "../components/signup-modal";
 import { LoginModal } from "../components/login-modal";
 import { useToast } from "../hooks/use-toast";
 import { LoadingScreen } from "@/components/loading-screen";
+import { ConfirmationModal } from "@/components/confirmation-modal";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -27,6 +29,7 @@ type AuthContextType = {
   user: User | null;
   openLoginModal: () => void;
   openSignUpModal: () => void;
+  openConfirmationModal: (message: string) => void;
   handleLogout: () => Promise<void>;
 };
 
@@ -38,6 +41,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isSignUpOpen, setSignUpOpen] = useState<boolean>(false);
   const [isLoginOpen, setLoginOpen] = useState<boolean>(false);
+  const [confirmationMessage, setConfirmationMessage] = useState<string | null>(
+    null
+  );
 
   async function handleLoginWithEmail(username: string, password: string) {
     try {
@@ -52,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (error instanceof FirebaseError) {
         console.error(error.message);
       }
+      toast({ title: "Erro no login." });
     }
   }
 
@@ -64,12 +71,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const res = await createUserWithEmailAndPassword(auth, email, password);
 
       await updateProfile(res.user, { displayName: username });
+      await sendConfirmationEmail(res.user);
 
       setUser(res.user);
-
       setSignUpOpen(false);
 
-      toast({ title: "Conta criada com sucesso!" });
+      toast({
+        title: "Conta criada com sucesso!",
+        description:
+          "Em instantes, você deve receber um e-mail de confirmação.",
+      });
     } catch (error) {
       if (error instanceof FirebaseError) {
         console.error(error.message);
@@ -81,10 +92,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   async function handleLogout() {
     try {
       await signOut(auth);
+      setUser(null);
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         console.error(error.message);
       }
+    }
+  }
+
+  async function sendConfirmationEmail(userToVerify: User | null) {
+    if (!userToVerify) {
+      handleLogout();
+      return;
+    }
+
+    try {
+      await sendEmailVerification(userToVerify);
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        throw new Error(error.message);
+      }
+      throw new Error("Erro no envio do e-mail de confirmação");
     }
   }
 
@@ -107,6 +135,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         handleLoginWithEmail,
         openLoginModal: () => setLoginOpen(true),
         openSignUpModal: () => setSignUpOpen(true),
+        openConfirmationModal: (message: string) =>
+          setConfirmationMessage(message),
         handleLogout,
       }}
     >
@@ -123,6 +153,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         openSignUpModal={() => setSignUpOpen(true)}
         onSubmit={handleLoginWithEmail}
       />
+      {confirmationMessage ? (
+        <ConfirmationModal
+          confirmationMessage={confirmationMessage}
+          onClose={() => setConfirmationMessage(null)}
+          onSubmit={async () => {
+            try {
+              await sendConfirmationEmail(user);
+              setConfirmationMessage(null);
+              toast({
+                title: "E-mail enviado!",
+                description:
+                  "Em instantes, você deve receber um e-mail de confirmação.",
+              });
+            } catch {
+              toast({
+                title: "Erro no envio do e-mail",
+                description: "Tente novamente mais tarde.",
+              });
+              handleLogout();
+            }
+          }}
+        />
+      ) : null}
     </AuthContext.Provider>
   );
 };

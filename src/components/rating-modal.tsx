@@ -108,7 +108,8 @@ export function RatingModal({
   onSubmitError,
   onSubmitSuccess,
 }: RatingModalProps) {
-  const { isAuthenticated, openLoginModal, user } = useAuth();
+  const { isAuthenticated, openLoginModal, openConfirmationModal, user } =
+    useAuth();
   const mutation = useMutation({
     mutationFn: async (data: {
       rating: number;
@@ -149,12 +150,19 @@ export function RatingModal({
     if (!isAuthenticated) {
       onClose();
       openLoginModal();
+      return;
+    }
+    if (!user?.emailVerified) {
+      onClose();
+      openConfirmationModal(
+        `${user?.displayName}, antes de avaliar uma partida, precisamos que confirme sua conta no e-mail ${user?.email}.`
+      );
     }
   }, [isOpen]);
 
   return (
     <Modal
-      show={isOpen && isAuthenticated}
+      show={isOpen && isAuthenticated && user?.emailVerified}
       size="lg"
       onClose={() => onClose()}
       popup

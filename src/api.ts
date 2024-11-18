@@ -76,7 +76,23 @@ async function getMatchById(matchId: string) {
     })
     .catch(() => {
       // throw new Error("Erro ao buscar partida");
-      return {};
+      return {
+        matchId: "not-found",
+        date: new Date(),
+        homeTeam: "Time A",
+        homeScore: 0,
+        awayTeam: "Time B",
+        awayScore: 0,
+        ratingsNum: 0,
+        avgRating: 0,
+        ratingProportion: {
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+        },
+      };
     });
 }
 
