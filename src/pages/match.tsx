@@ -139,7 +139,7 @@ export default function MatchPage() {
           <div className="w-full p-4 grid grid-cols-3">
             <CrestComponent league={match.league} team={match.homeTeam} />
             <div className="flex flex-col items-center gap-2">
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-neutral-500 text-center">
                 {formatDateLabel(match.date)}
               </p>
               <p className="text-3xl text-neutral-200 font-semibold">
