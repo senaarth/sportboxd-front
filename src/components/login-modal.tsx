@@ -63,7 +63,7 @@ const customTheme: CustomFlowbiteTheme["modal"] = {
     },
   },
   footer: {
-    base: "flex items-center space-x-2 border-gray-600 p-6 pt-0",
+    base: "flex items-center border-gray-600 p-6 pt-0",
     popup: "border-t",
   },
 };
