@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { DatePicker } from "../components/date-picker";
 import { LeagueChip } from "../components/league-chip";
@@ -37,12 +37,26 @@ const AVAILABLE_LEAGUES: League[] = [
 
 export default function Home() {
   const localLeague = localStorage.getItem("sportboxd:selected_league");
+  const localOrdering = localStorage.getItem("sportboxd:selected_ordering");
+  const localDate = localStorage.getItem("sportboxd:selected_date");
   const { isAuthenticated, handleLogout, openLoginModal } = useAuth();
   const [selectedLeague, selectLeague] = useState<League>(
     localLeague ? JSON.parse(localLeague) : AVAILABLE_LEAGUES[0]
   );
-  const [selectedDate, selectDate] = useState<Date | undefined>(undefined);
-  const [ordering, setOrdering] = useState<string>("-created_at");
+  const [selectedDate, selectDate] = useState<Date | undefined>(
+    localDate && !isNaN(new Date(localDate).getTime())
+      ? new Date(localDate)
+      : undefined
+  );
+  const [ordering, setOrdering] = useState<string>(
+    localOrdering === "-date" ||
+      localOrdering === "date" ||
+      localOrdering === "-ratings_num" ||
+      localOrdering === "-avg_rating" ||
+      localOrdering === "avg_rating"
+      ? localOrdering
+      : "-date"
+  );
   const {
     data: matchesData,
     error: error,
@@ -77,14 +91,6 @@ export default function Home() {
       },
     }
   );
-
-  useEffect(() => {
-    const localDate = localStorage.getItem("sportboxd:selected_date");
-
-    if (localDate)
-      if (!isNaN(new Date(localDate).getTime()))
-        selectDate(new Date(localDate));
-  }, []);
 
   return (
     <div className="bg-neutral-950 w-full min-h-svh flex flex-col items-center justify-start px-4 py-5 gap-5">
@@ -135,18 +141,21 @@ export default function Home() {
           }}
         />
         <Select
-          defaultValue="-created_at"
-          onValueChange={(value) => setOrdering(value)}
+          value={ordering}
+          onValueChange={(value) => {
+            if (value !== ordering) setOrdering(value);
+            localStorage.setItem("sportboxd:selected_ordering", value);
+          }}
         >
           <SelectTrigger className="w-full max-w-48 max-md:max-w-[unset] gap-2 justify-center h-10 bg-neutral-900 border border-neutral-800 focus:ring-0">
             <SelectValue placeholder="Ordernar por" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="-created_at">Mais recentes</SelectItem>
-            <SelectItem value="created_at">Mais antigos</SelectItem>
-            <SelectItem value="rating_count">Mais relevantes</SelectItem>
-            <SelectItem value="rating_avg">Melhor avaliados</SelectItem>
-            <SelectItem value="-rating_avg">Pior avaliados</SelectItem>
+            <SelectItem value="-date">Mais recentes</SelectItem>
+            <SelectItem value="date">Mais antigos</SelectItem>
+            <SelectItem value="-ratings_num">Mais relevantes</SelectItem>
+            <SelectItem value="-avg_rating">Melhor avaliados</SelectItem>
+            <SelectItem value="avg_rating">Pior avaliados</SelectItem>
           </SelectContent>
         </Select>
       </div>

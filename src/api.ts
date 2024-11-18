@@ -24,30 +24,43 @@ async function getMatches(
         order_by: orderBy,
       },
     })
-    .then(({ data: { matches, total_count } }) => {
+    .then(({ data }) => {
       return {
-        matches: matches.map((match: RemoteMatch) => ({
-          ...match,
-          matchId: match._id,
-          date: new Date(match.date),
-          homeTeam: match.home_team,
-          homeScore: match.home_score,
-          awayTeam: match.away_team,
-          awayScore: match.away_score,
-          ratingsNum: match.ratings_num,
-          avgRating: match.avg_rating ? match.avg_rating.toFixed(1) : 0,
-          ratingProportion: {
-            "1": match.count_by_rating["1"] / match.ratings_num,
-            "2": match.count_by_rating["2"] / match.ratings_num,
-            "3": match.count_by_rating["3"] / match.ratings_num,
-            "4": match.count_by_rating["4"] / match.ratings_num,
-            "5": match.count_by_rating["5"] / match.ratings_num,
-          },
-        })),
-        totalCount: total_count,
+        matches: data.matches.map((match: RemoteMatch) => {
+          const ratingProportion = match.count_by_rating
+            ? {
+                "1": match.count_by_rating["1"] / match.ratings_num,
+                "2": match.count_by_rating["2"] / match.ratings_num,
+                "3": match.count_by_rating["3"] / match.ratings_num,
+                "4": match.count_by_rating["4"] / match.ratings_num,
+                "5": match.count_by_rating["5"] / match.ratings_num,
+              }
+            : {
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "5": 0,
+              };
+
+          return {
+            ...match,
+            matchId: match._id,
+            date: new Date(match.date),
+            homeTeam: match.home_team,
+            homeScore: match.home_score,
+            awayTeam: match.away_team,
+            awayScore: match.away_score,
+            ratingsNum: match.ratings_num,
+            avgRating: match.avg_rating ? match.avg_rating.toFixed(1) : 0,
+            ratingProportion,
+          };
+        }),
+        totalCount: data.total_count,
       };
     })
-    .catch(() => {
+    .catch((error) => {
+      console.log("error", error);
       // throw new Error("Erro ao buscar as partidas");
       return { matches: [], totalCount: 0 };
     });
@@ -57,6 +70,22 @@ async function getMatchById(matchId: string) {
   return await axios
     .get(`${baseUrl}/matches/${matchId}`)
     .then(({ data: match }) => {
+      const ratingProportion = match.count_by_rating
+        ? {
+            "1": match.count_by_rating["1"] / match.ratings_num,
+            "2": match.count_by_rating["2"] / match.ratings_num,
+            "3": match.count_by_rating["3"] / match.ratings_num,
+            "4": match.count_by_rating["4"] / match.ratings_num,
+            "5": match.count_by_rating["5"] / match.ratings_num,
+          }
+        : {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+          };
+
       return {
         ...match,
         matchId: match._id,
@@ -67,13 +96,7 @@ async function getMatchById(matchId: string) {
         awayScore: match.away_score,
         ratingsNum: match.ratings_num,
         avgRating: match.avg_rating ? match.avg_rating.toFixed(1) : 0,
-        ratingProportion: {
-          "1": match.count_by_rating["1"] / match.ratings_num,
-          "2": match.count_by_rating["2"] / match.ratings_num,
-          "3": match.count_by_rating["3"] / match.ratings_num,
-          "4": match.count_by_rating["4"] / match.ratings_num,
-          "5": match.count_by_rating["5"] / match.ratings_num,
-        },
+        ratingProportion: ratingProportion,
       };
     })
     .catch(() => {
