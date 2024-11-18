@@ -64,7 +64,7 @@ const customTheme: CustomFlowbiteTheme["modal"] = {
     },
   },
   footer: {
-    base: "flex items-center space-x-2 border-gray-600 p-6 pt-0",
+    base: "flex items-center border-gray-600 p-6 pt-0",
     popup: "border-t",
   },
 };
@@ -78,12 +78,14 @@ interface SignUpModalProps {
     password: string
   ) => Promise<void>;
   openLoginModal: () => void;
+  onSubmitWithGoogle: () => Promise<void>;
 }
 
 export function SignUpModal({
   isOpen,
   onClose,
   onSubmit,
+  onSubmitWithGoogle,
   openLoginModal,
 }: SignUpModalProps) {
   const mutation = useMutation({
@@ -144,9 +146,9 @@ export function SignUpModal({
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer className="gap-4 flex flex-col items-center">
+        <Modal.Footer className="gap-2 flex flex-col items-center">
           <button
-            className="w-full rounded-md hover:brightness-75 transition-all bg-lime-500 text-base p-2.5 text-neutral-900"
+            className="w-full rounded-md hover:brightness-75 transition-all bg-lime-500 text-sm p-1.5 text-neutral-900"
             type="submit"
           >
             {mutation.isLoading ? (
@@ -155,7 +157,19 @@ export function SignUpModal({
               "Criar conta"
             )}
           </button>
-          <p className="text-sm text-neutral-200">
+          <button
+            className="w-full rounded-md flex items-center justify-center gap-2 hover:bg-neutral-300 transition-all bg-neutral-200 text-sm p-1.5 text-neutral-900"
+            onClick={() => onSubmitWithGoogle()}
+            type="button"
+          >
+            <img
+              className="w-4 h-4 object-contain"
+              src="/icons/google.svg"
+              alt="ícone do google"
+            />
+            Criar conta com Google
+          </button>
+          <p className="text-xs mt-2 text-neutral-200">
             Já tem uma conta?{" "}
             <button
               className="text-lime-500 ml-2"

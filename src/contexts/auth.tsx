@@ -99,6 +99,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       setUser(res.user);
       setLoginOpen(false);
+      setSignUpOpen(false);
 
       toast({
         title: "Login realizado com sucesso!",
@@ -169,6 +170,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         onClose={() => setSignUpOpen(false)}
         openLoginModal={() => setLoginOpen(true)}
         onSubmit={handleSignupWithEmail}
+        onSubmitWithGoogle={handleLoginWithGoogle}
       />
       <LoginModal
         isOpen={isLoginOpen}
