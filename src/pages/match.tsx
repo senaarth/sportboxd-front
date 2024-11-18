@@ -8,6 +8,7 @@ import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { getMatchById, getMatchRatings } from "../api";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShareRatingModal } from "@/components/share-rating-modal";
+import { twMerge } from "tailwind-merge";
 
 const RatingProportionComponent = ({
   rating,
@@ -142,9 +143,31 @@ export default function MatchPage() {
               <p className="text-sm text-neutral-500 text-center">
                 {formatDateLabel(match.date)}
               </p>
-              <p className="text-3xl text-neutral-200 font-semibold">
-                {match?.homeScore} - {match?.awayScore}
-              </p>
+              <div className="flex items-center justify-center gap-2">
+                <p className="text-3xl text-neutral-200 font-semibold flex items-center gap-2">
+                  <span
+                    className={twMerge(
+                      "w-1 h-1 rounded-full",
+                      match.homeScore > match.awayScore
+                        ? "bg-lime-500"
+                        : "bg-transparent"
+                    )}
+                  />
+                  {match.homeScore}
+                </p>
+                <p className="text-3xl text-neutral-200 font-semibold">-</p>
+                <p className="text-3xl text-neutral-200 font-semibold flex items-center gap-2">
+                  {match.awayScore}
+                  <span
+                    className={twMerge(
+                      "w-1 h-1 rounded-full bg-lime-500",
+                      match.awayScore > match.homeScore
+                        ? "bg-lime-500"
+                        : "bg-transparent"
+                    )}
+                  />
+                </p>
+              </div>
               <p className="text-xs text-neutral-200">Encerrado</p>
             </div>
             <CrestComponent league={match.league} team={match.awayTeam} />

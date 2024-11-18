@@ -133,7 +133,7 @@ export function LoginModal({
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer className="gap-4 flex flex-col items-center">
+        <Modal.Footer className="gap-2 flex flex-col items-center">
           <button
             className="w-full rounded-md hover:brightness-75 transition-all bg-lime-500 text-sm p-1.5 text-neutral-900"
             type="submit"
@@ -156,7 +156,7 @@ export function LoginModal({
             />
             Entrar com Google
           </button>
-          <p className="text-xs text-neutral-200">
+          <p className="text-xs text-neutral-200 mt-2">
             Ainda não tem uma conta?{" "}
             <button
               className="text-lime-500 ml-2"

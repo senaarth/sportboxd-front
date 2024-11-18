@@ -45,10 +45,13 @@ export function MatchCard({
           <p className="text-base text-neutral-100">{homeTeam}</p>
           <p
             className={twMerge(
-              "text-lg ml-auto",
+              "text-lg ml-auto flex items-center gap-2",
               homeScore > awayScore ? "text-neutral-100" : "text-neutral-400"
             )}
           >
+            {homeScore > awayScore ? (
+              <span className="h-1 w-1 rounded-full bg-lime-500" />
+            ) : null}
             {homeScore}
           </p>
         </div>
@@ -64,10 +67,13 @@ export function MatchCard({
           <p className="text-base text-neutral-100">{awayTeam}</p>
           <p
             className={twMerge(
-              "text-lg ml-auto",
+              "text-lg ml-auto flex items-center gap-2",
               awayScore > homeScore ? "text-neutral-100" : "text-neutral-400"
             )}
           >
+            {awayScore > homeScore ? (
+              <span className="h-1 w-1 rounded-full bg-lime-500" />
+            ) : null}
             {awayScore}
           </p>
         </div>
