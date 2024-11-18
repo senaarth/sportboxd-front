@@ -73,6 +73,7 @@ interface LoginModalProps {
   onClose: () => void;
   onSubmit: (email: string, password: string) => Promise<void>;
   openSignUpModal: () => void;
+  onSubmitWithGoogle: () => Promise<void>;
 }
 
 export function LoginModal({
@@ -80,6 +81,7 @@ export function LoginModal({
   onClose,
   onSubmit,
   openSignUpModal,
+  onSubmitWithGoogle,
 }: LoginModalProps) {
   const mutation = useMutation({
     mutationFn: async (data: { email: string; password: string }) =>
@@ -133,7 +135,7 @@ export function LoginModal({
         </Modal.Body>
         <Modal.Footer className="gap-4 flex flex-col items-center">
           <button
-            className="w-full rounded-md hover:brightness-75 transition-all bg-lime-500 text-base p-2.5 text-neutral-900"
+            className="w-full rounded-md hover:brightness-75 transition-all bg-lime-500 text-sm p-1.5 text-neutral-900"
             type="submit"
           >
             {mutation.isLoading ? (
@@ -142,7 +144,19 @@ export function LoginModal({
               "Entrar"
             )}
           </button>
-          <p className="text-sm text-neutral-200">
+          <button
+            className="w-full rounded-md flex items-center justify-center gap-2 hover:bg-neutral-300 transition-all bg-neutral-200 text-sm p-1.5 text-neutral-900"
+            onClick={() => onSubmitWithGoogle()}
+            type="button"
+          >
+            <img
+              className="w-4 h-4 object-contain"
+              src="/icons/google.svg"
+              alt="ícone do google"
+            />
+            Entrar com Google
+          </button>
+          <p className="text-xs text-neutral-200">
             Ainda não tem uma conta?{" "}
             <button
               className="text-lime-500 ml-2"

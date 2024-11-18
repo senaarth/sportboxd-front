@@ -13,6 +13,8 @@ import {
   signOut,
   onAuthStateChanged,
   sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 
 import { auth } from "../lib/firebase";
@@ -31,11 +33,13 @@ type AuthContextType = {
   openSignUpModal: () => void;
   openConfirmationModal: (message: string) => void;
   handleLogout: () => Promise<void>;
+  handleLoginWithGoogle: () => Promise<void>;
 };
 
 const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const googleProvider = new GoogleAuthProvider();
   const { toast } = useToast();
   const [isLoading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User | null>(null);
@@ -89,6 +93,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  async function handleLoginWithGoogle() {
+    try {
+      const res = await signInWithPopup(auth, googleProvider);
+
+      setUser(res.user);
+      setLoginOpen(false);
+
+      toast({
+        title: "Login realizado com sucesso!",
+      });
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        console.error(error.message);
+      }
+      toast({ title: "Erro na autenticação" });
+    }
+  }
+
   async function handleLogout() {
     try {
       await signOut(auth);
@@ -138,6 +160,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         openConfirmationModal: (message: string) =>
           setConfirmationMessage(message),
         handleLogout,
+        handleLoginWithGoogle,
       }}
     >
       {isLoading ? <LoadingScreen /> : children}
@@ -152,6 +175,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         onClose={() => setLoginOpen(false)}
         openSignUpModal={() => setSignUpOpen(true)}
         onSubmit={handleLoginWithEmail}
+        onSubmitWithGoogle={handleLoginWithGoogle}
       />
       {confirmationMessage ? (
         <ConfirmationModal
