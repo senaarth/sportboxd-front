@@ -136,7 +136,7 @@ export function ShareRatingModal({
             <button
               className="w-full rounded-lg bg-neutral-800 border border-neutral-700 p-3.5 flex flex-col items-start gap-1"
               onClick={() => {
-                navigator.clipboard.writeText(shareUrl);
+                navigator.clipboard.writeText(`https://${shareUrl}`);
                 toast({
                   title: "Link copiado com sucesso!",
                 });
