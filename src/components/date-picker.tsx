@@ -112,7 +112,7 @@ export function DatePicker({ defaultValue, onDatePick }: DatePickerProps) {
           onClick={() => setIsExpanded(!isExpanded)}
           type="button"
         >
-          <p className="text-neutral-200">
+          <p className="text-neutral-200 text-sm">
             {selectedDate ? formatDateLabel(selectedDate) : "Selecionar Data"}
           </p>
           <img

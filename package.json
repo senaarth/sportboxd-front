@@ -13,6 +13,7 @@
   "dependencies": {
     "@firebasegen/default-connector": "link:dataconnect-generated/js/default-connector",
     "@hookform/resolvers": "^3.9.1",
+    "@radix-ui/react-select": "^2.1.2",
     "@radix-ui/react-toast": "^1.2.2",
     "@types/mime": "3.0.4",
     "autoprefixer": "^10.4.20",

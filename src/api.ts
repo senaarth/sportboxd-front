@@ -8,7 +8,8 @@ async function getMatches(
   since: Date | undefined,
   until: Date | undefined,
   league: string,
-  currentPage: number
+  currentPage: number,
+  orderBy: string
 ) {
   return await axios
     .get(`${baseUrl}/matches/`, {
@@ -20,6 +21,7 @@ async function getMatches(
         league,
         skip: 15 * currentPage,
         limit: 15,
+        order_by: orderBy,
       },
     })
     .then(({ data: { matches, total_count } }) => {

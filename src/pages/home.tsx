@@ -8,6 +8,13 @@ import { getMatches } from "../api";
 import { useAuth } from "../contexts/auth";
 import { twMerge } from "tailwind-merge";
 import { MatchesByDateList } from "@/components/matches-by-date-list";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type League = {
   code: string;
@@ -35,6 +42,7 @@ export default function Home() {
     localLeague ? JSON.parse(localLeague) : AVAILABLE_LEAGUES[0]
   );
   const [selectedDate, selectDate] = useState<Date | undefined>(undefined);
+  const [ordering, setOrdering] = useState<string>("-created_at");
   const {
     data: matchesData,
     error: error,
@@ -43,13 +51,19 @@ export default function Home() {
     isFetchingNextPage,
     isLoading,
   } = useInfiniteQuery<{ matches: Match[]; totalCount: number }>(
-    ["matches", selectedLeague.code, selectedDate?.toLocaleDateString("pt-BR")],
+    [
+      "matches",
+      selectedLeague.code,
+      selectedDate?.toLocaleDateString("pt-BR"),
+      ordering,
+    ],
     async ({ pageParam = 0 }) => {
       const results = await getMatches(
         selectedDate,
         selectedDate,
         selectedLeague.code,
-        pageParam
+        pageParam,
+        ordering
       );
       return results;
     },
@@ -107,7 +121,7 @@ export default function Home() {
           />
         ))}
       </div>
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl flex max-md:flex-col items-start gap-4 max-md:gap-2">
         <DatePicker
           defaultValue={selectedDate || undefined}
           onDatePick={(date: Date | undefined) => {
@@ -120,6 +134,21 @@ export default function Home() {
             else localStorage.removeItem("sportboxd:selected_date");
           }}
         />
+        <Select
+          defaultValue="-created_at"
+          onValueChange={(value) => setOrdering(value)}
+        >
+          <SelectTrigger className="w-full max-w-48 max-md:max-w-[unset] gap-2 justify-center h-10 bg-neutral-900 border border-neutral-800 focus:ring-0">
+            <SelectValue placeholder="Ordernar por" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="-created_at">Mais recentes</SelectItem>
+            <SelectItem value="created_at">Mais antigos</SelectItem>
+            <SelectItem value="rating_count">Mais relevantes</SelectItem>
+            <SelectItem value="rating_avg">Melhor avaliados</SelectItem>
+            <SelectItem value="-rating_avg">Pior avaliados</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       {isLoading ? (
         <Loading />
