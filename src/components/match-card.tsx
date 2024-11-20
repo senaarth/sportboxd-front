@@ -55,7 +55,10 @@ export function MatchCard({
               <span
                 className={twMerge(
                   "h-1 w-1 rounded-full bg-lime-500",
-                  status !== "FINISHED" ? "animate-ping" : ""
+                  status !== "FINISHED" &&
+                    matchId !== "673a106c1b576d2329fee225"
+                    ? "animate-ping"
+                    : ""
                 )}
               />
             ) : null}
@@ -82,7 +85,10 @@ export function MatchCard({
               <span
                 className={twMerge(
                   "h-1 w-1 rounded-full bg-lime-500",
-                  status !== "FINISHED" ? "animate-ping" : ""
+                  status !== "FINISHED" &&
+                    matchId !== "673a106c1b576d2329fee225"
+                    ? "animate-ping"
+                    : ""
                 )}
               />
             ) : null}

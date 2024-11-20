@@ -148,7 +148,10 @@ export default function MatchPage() {
                   <span
                     className={twMerge(
                       "w-1 h-1 rounded-full",
-                      match.status !== "FINISHED" ? "animate-ping" : "",
+                      match.status !== "FINISHED" &&
+                        match.matchId !== "673a106c1b576d2329fee225"
+                        ? "animate-ping"
+                        : "",
                       match.homeScore > match.awayScore
                         ? "bg-lime-500"
                         : "bg-transparent"
@@ -162,7 +165,10 @@ export default function MatchPage() {
                   <span
                     className={twMerge(
                       "w-1 h-1 rounded-full",
-                      match.status !== "FINISHED" ? "animate-ping" : "",
+                      match.status !== "FINISHED" &&
+                        match.matchId !== "673a106c1b576d2329fee225"
+                        ? "animate-ping"
+                        : "",
                       match.awayScore > match.homeScore
                         ? "bg-lime-500"
                         : "bg-transparent"
