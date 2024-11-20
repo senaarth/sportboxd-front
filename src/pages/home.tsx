@@ -147,7 +147,7 @@ export default function Home() {
             localStorage.setItem("sportboxd:selected_ordering", value);
           }}
         >
-          <SelectTrigger className="w-full max-w-48 max-md:max-w-[unset] gap-2 justify-center h-10 bg-neutral-900 border border-neutral-800 focus:ring-0">
+          <SelectTrigger className="w-full max-w-48 max-md:max-w-[unset] gap-2 justify-center h-10 bg-neutral-900 border border-neutral-800 focus:ring-0 hover:bg-neutral-800 hover:border-neutral-700">
             <SelectValue placeholder="Ordernar por" />
           </SelectTrigger>
           <SelectContent>
