@@ -23,7 +23,7 @@ interface MatchesByDateListProps {
   matches: Match[];
 }
 
-export function MatchesByDateList({ matches }: MatchesByDateListProps) {
+function MatchesByDateList({ matches }: MatchesByDateListProps) {
   const matchesByDate = useMemo(() => splitMatchesByDate(matches), [matches]);
   return Object.keys(splitMatchesByDate(matches)).map((date, index) => {
     return (
@@ -40,4 +40,17 @@ export function MatchesByDateList({ matches }: MatchesByDateListProps) {
       </div>
     );
   });
+}
+
+interface MatchesListProps {
+  matches: Match[];
+  groupByDate: boolean;
+}
+
+export function MatchesList({ matches, groupByDate }: MatchesListProps) {
+  return groupByDate ? (
+    <MatchesByDateList matches={matches} />
+  ) : (
+    matches.map((match) => <MatchCard key={match.matchId} {...match} />)
+  );
 }

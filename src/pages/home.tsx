@@ -7,7 +7,7 @@ import { Loading } from "../components/loading";
 import { getMatches } from "../api";
 import { useAuth } from "../contexts/auth";
 import { twMerge } from "tailwind-merge";
-import { MatchesByDateList } from "@/components/matches-by-date-list";
+import { MatchesList } from "@/components/matches-by-date-list";
 import {
   Select,
   SelectContent,
@@ -173,9 +173,10 @@ export default function Home() {
               ) : (
                 <>
                   {matchesData?.pages.map((page) => (
-                    <MatchesByDateList
+                    <MatchesList
                       key={`matches-page-${page}`}
                       matches={page.matches}
+                      groupByDate={ordering.includes("date")}
                     />
                   ))}
                   {hasNextPage && (
