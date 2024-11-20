@@ -125,7 +125,6 @@ export function RatingModal({
       await postRating({
         ...data,
         match_id: match.matchId,
-        author: user.displayName || user.email,
       });
     },
     onError: onSubmitError,

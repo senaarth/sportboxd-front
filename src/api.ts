@@ -1,8 +1,25 @@
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 
 import { getNextDay } from "./utils/date";
+import { getUserToken } from "./lib/firebase";
 
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+
+const api = axios.create({
+  baseURL,
+});
+
+export async function authorization(
+  config: InternalAxiosRequestConfig<any>
+): Promise<InternalAxiosRequestConfig<any>> {
+  const token = await getUserToken();
+
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+
+  return config;
+}
+
+api.interceptors.request.use(authorization);
 
 async function getMatches(
   since: Date | undefined,
@@ -11,8 +28,8 @@ async function getMatches(
   currentPage: number,
   orderBy: string
 ) {
-  return await axios
-    .get(`${baseUrl}/matches/`, {
+  return await api
+    .get(`/matches/`, {
       params: {
         since: since?.toLocaleDateString("pt-BR"),
         until: until
@@ -67,8 +84,8 @@ async function getMatches(
 }
 
 async function getMatchById(matchId: string) {
-  return await axios
-    .get(`${baseUrl}/matches/${matchId}`)
+  return await api
+    .get(`/matches/${matchId}`)
     .then(({ data: match }) => {
       const ratingProportion = match.count_by_rating
         ? {
@@ -124,8 +141,8 @@ async function getMatchById(matchId: string) {
 async function getMatchRatings(matchId: string, ratingId: string | null) {
   const ratingIdParam = ratingId ? `?first_rating_id=${ratingId}` : "";
 
-  return await axios
-    .get(`${baseUrl}/ratings/${matchId}` + ratingIdParam)
+  return await api
+    .get(`/ratings/${matchId}` + ratingIdParam)
     .then(({ data }) => {
       return data.map((rating: RemoteRating) => ({
         ...rating,
@@ -143,11 +160,10 @@ async function getMatchRatings(matchId: string, ratingId: string | null) {
 async function postRating(data: {
   title: string;
   rating: number;
-  author: string;
   comment: string;
   match_id: string;
 }) {
-  await axios.post(`${baseUrl}/ratings/`, data).catch(() => {
+  await api.post(`/ratings/`, data).catch(() => {
     throw new Error("Erro ao publicar avaliação");
   });
 }

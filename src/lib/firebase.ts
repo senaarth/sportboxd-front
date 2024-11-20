@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { getAuth, getIdToken, onAuthStateChanged } from "firebase/auth";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 const firebaseConfig = {
@@ -17,4 +17,19 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth();
 
-export { auth, app, analytics };
+const getUserToken = async () => {
+  return new Promise((resolve, _reject) => {
+    const unsub = onAuthStateChanged(getAuth(), async (user) => {
+      if (user) {
+        const token = await getIdToken(user);
+        resolve(token);
+      } else {
+        console.log("User not logged in");
+        resolve(null);
+      }
+      unsub();
+    });
+  });
+};
+
+export { auth, app, analytics, getUserToken };
