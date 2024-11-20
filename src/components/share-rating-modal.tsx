@@ -73,7 +73,7 @@ export function ShareRatingModal({
   const { toast } = useToast();
   const shareUrl = useMemo(
     () =>
-      `sportboxd.vercel.app/partidas/${match.matchId}?rating_id=${rating.ratingId}`,
+      `sportboxd.com/partidas/${match.matchId}?rating_id=${rating.ratingId}`,
     [rating, match]
   );
 
