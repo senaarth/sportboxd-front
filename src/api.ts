@@ -31,10 +31,8 @@ async function getMatches(
   return await api
     .get(`/matches/`, {
       params: {
-        since: since?.toLocaleDateString("pt-BR"),
-        until: until
-          ? getNextDay(until).toLocaleDateString("pt-BR")
-          : undefined,
+        since: since?.toISOString(),
+        until: until ? getNextDay(until).toISOString() : undefined,
         league,
         skip: 15 * currentPage,
         limit: 15,
