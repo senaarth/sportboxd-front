@@ -12,6 +12,7 @@ interface MatchCardProps {
   ratingsNum: number;
   date: Date;
   league: string;
+  status: string;
 }
 
 export function MatchCard({
@@ -23,6 +24,7 @@ export function MatchCard({
   avgRating,
   ratingsNum,
   league,
+  status,
 }: MatchCardProps) {
   const navigate = useNavigate();
 
@@ -50,7 +52,12 @@ export function MatchCard({
             )}
           >
             {homeScore > awayScore ? (
-              <span className="h-1 w-1 rounded-full bg-lime-500" />
+              <span
+                className={twMerge(
+                  "h-1 w-1 rounded-full bg-lime-500",
+                  status !== "FINISHED" ? "animate-ping" : ""
+                )}
+              />
             ) : null}
             {homeScore}
           </p>
@@ -72,7 +79,12 @@ export function MatchCard({
             )}
           >
             {awayScore > homeScore ? (
-              <span className="h-1 w-1 rounded-full bg-lime-500" />
+              <span
+                className={twMerge(
+                  "h-1 w-1 rounded-full bg-lime-500",
+                  status !== "FINISHED" ? "animate-ping" : ""
+                )}
+              />
             ) : null}
             {awayScore}
           </p>
