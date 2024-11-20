@@ -18,6 +18,7 @@ declare global {
       "4": number;
       "5": number;
     };
+    status: string;
   };
 
   type Rating = {
@@ -47,6 +48,7 @@ declare global {
       "4": number;
       "5": number;
     };
+    status: string;
   };
 
   type RemoteRating = {

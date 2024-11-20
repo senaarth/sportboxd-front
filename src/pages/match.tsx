@@ -168,7 +168,9 @@ export default function MatchPage() {
                   />
                 </p>
               </div>
-              <p className="text-xs text-neutral-200">Encerrado</p>
+              <p className="text-xs text-neutral-200">
+                {match.status === "FINISHED" ? "Encerrado" : "Em andamento"}
+              </p>
             </div>
             <CrestComponent league={match.league} team={match.awayTeam} />
           </div>
