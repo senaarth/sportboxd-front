@@ -4,11 +4,19 @@ import { formatDateLabel } from "../utils/date";
 import { Loading } from "../components/loading";
 import { Stars } from "../components/stars";
 import { RatingModal } from "../components/rating-modal";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { getMatchById, getMatchRatings } from "../api";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ShareRatingModal } from "@/components/share-rating-modal";
 import { twMerge } from "tailwind-merge";
+import { ChevronDown } from "lucide-react";
 
 const RatingProportionComponent = ({
   rating,
@@ -37,6 +45,28 @@ const RatingCard = ({
   rating: Rating;
   setRatingToShare: Dispatch<SetStateAction<Rating | null>>;
 }) => {
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+  const textRef = useRef<HTMLParagraphElement>(null);
+
+  const checkOverflow = () => {
+    if (textRef.current) {
+      const lineHeight = parseFloat(
+        window.getComputedStyle(textRef.current).lineHeight
+      );
+      const lines = Math.round(textRef.current.scrollHeight / lineHeight);
+      setIsOverflowing(lines > 3);
+    }
+  };
+
+  useEffect(() => {
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => {
+      window.removeEventListener("resize", checkOverflow);
+    };
+  }, [rating.comment, isExpanded]);
+
   return (
     <div
       key={`rating-${rating.ratingId}`}
@@ -54,7 +84,30 @@ const RatingCard = ({
           </p>
         </div>
       </div>
-      <p className="text-sm mt-4">{rating.comment}</p>
+      <p
+        ref={textRef}
+        className={twMerge(
+          "text-sm mt-4 transition-all",
+          isExpanded ? "" : "line-clamp-3"
+        )}
+      >
+        {rating.comment}
+      </p>
+      {isOverflowing && (
+        <button
+          className="text-xs mt-2 w-full text-right text-neutral-400 flex items-center justify-end gap-0.5"
+          onClick={() => setIsExpanded(!isExpanded)}
+          type="button"
+        >
+          <ChevronDown
+            className={twMerge(
+              "h-3 w-3 transition-all",
+              isExpanded ? "rotate-180" : ""
+            )}
+          />
+          {isExpanded ? "Ver menos" : "Ver mais"}
+        </button>
+      )}
       <div className="w-full flex items-center justify-between mt-2">
         <button
           className="p-1 rounded hover:bg-neutral-800 ml-auto"

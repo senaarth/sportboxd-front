@@ -132,6 +132,7 @@ export function SignUpModal({
                 error={errors.username?.message}
                 id="username"
                 label="Nome de usuário"
+                maxLength={20}
                 placeholder="Ex.: nomedeusuario"
                 {...register("username")}
               />
