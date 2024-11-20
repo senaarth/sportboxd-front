@@ -24,6 +24,7 @@ import { LoginModal } from "../components/login-modal";
 import { useToast } from "../hooks/use-toast";
 import { LoadingScreen } from "@/components/loading-screen";
 import { ConfirmationModal } from "@/components/confirmation-modal";
+import { ProfileModal } from "@/components/profile-modal";
 
 type AuthContextType = {
   isAuthenticated: boolean;
@@ -32,6 +33,7 @@ type AuthContextType = {
   openLoginModal: () => void;
   openSignUpModal: () => void;
   openConfirmationModal: (message: string) => void;
+  openProfileModal: () => void;
   handleLogout: () => Promise<void>;
   handleLoginWithGoogle: () => Promise<void>;
 };
@@ -45,6 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isSignUpOpen, setSignUpOpen] = useState<boolean>(false);
   const [isLoginOpen, setLoginOpen] = useState<boolean>(false);
+  const [isProfileModalOpen, setProfileModalOpen] = useState<boolean>(false);
   const [confirmationMessage, setConfirmationMessage] = useState<string | null>(
     null
   );
@@ -162,6 +165,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           setConfirmationMessage(message),
         handleLogout,
         handleLoginWithGoogle,
+        openProfileModal: () => setProfileModalOpen(true),
       }}
     >
       {isLoading ? <LoadingScreen /> : children}
@@ -179,6 +183,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         onSubmit={handleLoginWithEmail}
         onSubmitWithGoogle={handleLoginWithGoogle}
       />
+      {user ? (
+        <ProfileModal
+          currentUsername={user?.displayName}
+          isOpen={isProfileModalOpen}
+          onClose={() => setProfileModalOpen(false)}
+          onSubmit={async (username: string) => {
+            await updateProfile(user, { displayName: username });
+            setUser({ ...user, displayName: username });
+          }}
+        />
+      ) : null}
       {confirmationMessage ? (
         <ConfirmationModal
           confirmationMessage={confirmationMessage}

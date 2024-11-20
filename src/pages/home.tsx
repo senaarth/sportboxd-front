@@ -39,7 +39,8 @@ export default function Home() {
   const localLeague = localStorage.getItem("sportboxd:selected_league");
   const localOrdering = localStorage.getItem("sportboxd:selected_ordering");
   const localDate = localStorage.getItem("sportboxd:selected_date");
-  const { isAuthenticated, handleLogout, openLoginModal } = useAuth();
+  const { isAuthenticated, handleLogout, openLoginModal, openProfileModal } =
+    useAuth();
   const [selectedLeague, selectLeague] = useState<League>(
     localLeague ? JSON.parse(localLeague) : AVAILABLE_LEAGUES[0]
   );
@@ -100,10 +101,22 @@ export default function Home() {
           className="h-7"
           src="sportboxd.svg"
         />
+        {isAuthenticated ? (
+          <button
+            className={twMerge(
+              "text-sm px-2 py-1 ml-auto",
+              isAuthenticated ? "text-neutral-200" : "text-lime-500"
+            )}
+            onClick={openProfileModal}
+            type="button"
+          >
+            Editar Perfil
+          </button>
+        ) : null}
         <button
           className={twMerge(
             "text-sm px-2 py-1",
-            isAuthenticated ? "text-neutral-200" : "text-lime-500"
+            isAuthenticated ? "text-neutral-400" : "text-lime-500"
           )}
           onClick={isAuthenticated ? handleLogout : openLoginModal}
           type="button"
