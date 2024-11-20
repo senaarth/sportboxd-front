@@ -103,7 +103,7 @@ export function ShareRatingModal({
                 </p>
                 <Stars color="lime" size="xs" number={rating.rating} />
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 min-w-[78px]">
                 <img
                   className="h-6 w-6 object-contain"
                   src={`/crests/${match.league}/${match.homeTeam}.png`}
