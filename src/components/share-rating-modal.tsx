@@ -1,4 +1,3 @@
-import { useToast } from "@/hooks/use-toast";
 import { CustomFlowbiteTheme, Modal } from "flowbite-react";
 import { useMemo } from "react";
 import { Stars } from "./stars";
@@ -70,7 +69,6 @@ export function ShareRatingModal({
   rating,
   match,
 }: ShareRatingModalProps) {
-  const { toast } = useToast();
   const shareUrl = useMemo(
     () =>
       `sportboxd.com/partidas/${match.matchId}?rating_id=${rating.ratingId}`,
@@ -103,7 +101,7 @@ export function ShareRatingModal({
                 </p>
                 <Stars color="lime" size="xs" number={rating.rating} />
               </div>
-              <div className="flex items-center gap-1 min-w-[78px]">
+              <div className="flex items-center gap-1">
                 <img
                   className="h-6 w-6 object-contain"
                   src={`/crests/${match.league}/${match.homeTeam}.png`}
@@ -131,16 +129,66 @@ export function ShareRatingModal({
           </div>
           <div className="w-full flex flex-col gap-2 items-start">
             <p className="text-sm font-semibold text-neutral-200">
+              Compartilhar
+            </p>
+            <div className="w-full rounded-lg bg-neutral-800 border border-neutral-700 p-3.5 flex items-center justify-between gap-1">
+              <a
+                href={`https://twitter.com/intent/tweet?text=Veja%20esta%20review%20de%20${match.homeTeam}%20e%20${match.awayTeam}&url=https://${shareUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  className="h-6 w-6"
+                  src="/icons/twitter.svg"
+                  alt="ícone twitter"
+                />
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=https://${shareUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  className="h-6 w-6"
+                  src="/icons/facebook.svg"
+                  alt="ícone facebook"
+                />
+              </a>
+              <a
+                href={`https://t.me/share/url?text=Veja%20esta%20review%20de%20${match.homeTeam}%20e%20${match.awayTeam}&url=https://${shareUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  className="h-6 w-6"
+                  src="/icons/telegram.svg"
+                  alt="ícone telegram"
+                />
+              </a>
+              <a
+                href={`https://wa.me/?text=Veja%20esta%20review%20de%20${match.homeTeam}%20e%20${match.awayTeam}%20https://${shareUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  className="h-6 w-6"
+                  src="/icons/whatsapp.svg"
+                  alt="ícone whatsapp"
+                />
+              </a>
+            </div>
+          </div>
+          <div className="w-full flex flex-col gap-2 items-start">
+            <p className="text-sm font-semibold text-neutral-200">
               Link da avaliação
             </p>
             <button
               className="w-full rounded-lg bg-neutral-800 border border-neutral-700 p-3.5 flex flex-col items-start gap-1"
               onClick={() => {
-                navigator.clipboard.writeText(`https://${shareUrl}`);
-                toast({
-                  title: "Link copiado com sucesso!",
+                navigator.share({
+                  url: `https://${shareUrl}`,
+                  text: `Veja esta review de ${match.homeTeam} e ${match.awayTeam}`,
                 });
-                onClose();
               }}
               type="button"
             >
