@@ -57,11 +57,14 @@ async function getMatches(
                 "4": 0,
                 "5": 0,
               };
+          const date = new Date(match.date);
+
+          date.setHours(date.getHours() - 3);
 
           return {
             ...match,
+            date,
             matchId: match._id,
-            date: new Date(match.date),
             homeTeam: match.home_team,
             homeScore: match.home_score,
             awayTeam: match.away_team,
@@ -100,11 +103,14 @@ async function getMatchById(matchId: string) {
             "4": 0,
             "5": 0,
           };
+      const date = new Date(match.date);
+
+      date.setHours(date.getHours() - 3);
 
       return {
         ...match,
+        date,
         matchId: match._id,
-        date: new Date(match.date),
         homeTeam: match.home_team,
         homeScore: match.home_score,
         awayTeam: match.away_team,

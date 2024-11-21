@@ -5,10 +5,11 @@ function formatDateLabel(date?: Date): string {
   const yesterday = new Date();
   const tomorrow = new Date();
   yesterday.setDate(today.getDate() - 1);
-  yesterday.setDate(today.getDate() + 1);
+  tomorrow.setDate(today.getDate() + 1);
 
   today.setHours(0, 0, 0, 0);
   yesterday.setHours(0, 0, 0, 0);
+  tomorrow.setHours(0, 0, 0, 0);
   date.setHours(0, 0, 0, 0);
 
   if (date.getTime() === today.getTime()) return "Hoje";
