@@ -148,12 +148,16 @@ async function getMatchRatings(matchId: string, ratingId: string | null) {
   return await api
     .get(`/ratings/${matchId}` + ratingIdParam)
     .then(({ data }) => {
-      return data.map((rating: RemoteRating) => ({
-        ...rating,
-        ratingId: rating._id,
-        matchId: rating.match_id,
-        createdAt: new Date(rating.created_at),
-      }));
+      return data.map((rating: RemoteRating) => {
+        const createdAt = new Date(rating.created_at);
+        createdAt.setHours(createdAt.getHours() - 3);
+        return {
+          ...rating,
+          ratingId: rating._id,
+          matchId: rating.match_id,
+          createdAt,
+        };
+      });
     })
     .catch(() => {
       // throw new Error("Erro ao buscar as partidas");

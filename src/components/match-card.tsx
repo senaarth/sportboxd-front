@@ -51,14 +51,11 @@ export function MatchCard({
               homeScore > awayScore ? "text-neutral-100" : "text-neutral-400"
             )}
           >
-            {homeScore > awayScore ? (
+            {homeScore > awayScore && matchId !== "673a106c1b576d2329fee225" ? (
               <span
                 className={twMerge(
-                  "h-1 w-1 rounded-full bg-lime-500",
-                  status !== "FINISHED" &&
-                    matchId !== "673a106c1b576d2329fee225"
-                    ? "animate-ping"
-                    : ""
+                  "h-1 w-1 rounded-full",
+                  status === "FINISHED" ? "bg-lime-500" : ""
                 )}
               />
             ) : null}
@@ -81,14 +78,11 @@ export function MatchCard({
               awayScore > homeScore ? "text-neutral-100" : "text-neutral-400"
             )}
           >
-            {awayScore > homeScore ? (
+            {awayScore > homeScore && matchId !== "673a106c1b576d2329fee225" ? (
               <span
                 className={twMerge(
-                  "h-1 w-1 rounded-full bg-lime-500",
-                  status !== "FINISHED" &&
-                    matchId !== "673a106c1b576d2329fee225"
-                    ? "animate-ping"
-                    : ""
+                  "h-1 w-1 rounded-full",
+                  status === "FINISHED" ? "bg-lime-500" : ""
                 )}
               />
             ) : null}
@@ -101,7 +95,19 @@ export function MatchCard({
           <Stars color="lime" number={avgRating} size="xs" />
           <p className="text-xs text-neutral-100">{avgRating}/5</p>
         </div>
-        <p className="text-neutral-500 text-xs">{ratingsNum} avaliações</p>
+        <div className="flex flex-col items-end">
+          <p className="text-neutral-500 text-xs flex items-center gap-2">
+            {status === "FINISHED" || matchId === "673a106c1b576d2329fee225" ? (
+              "Encerrado"
+            ) : (
+              <>
+                <span className="h-1 w-1 rounded-full bg-lime-500 animate-ping" />
+                Em andamento
+              </>
+            )}
+          </p>
+          <p className="text-neutral-500 text-xs">{ratingsNum} avaliações</p>
+        </div>
       </div>
     </button>
   );

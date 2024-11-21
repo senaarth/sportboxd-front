@@ -201,11 +201,8 @@ export default function MatchPage() {
                   <span
                     className={twMerge(
                       "w-1 h-1 rounded-full",
-                      match.status !== "FINISHED" &&
-                        match.matchId !== "673a106c1b576d2329fee225"
-                        ? "animate-ping"
-                        : "",
-                      match.homeScore > match.awayScore
+                      match.homeScore > match.awayScore &&
+                        match.status === "FINISHED"
                         ? "bg-lime-500"
                         : "bg-transparent"
                     )}
@@ -218,19 +215,29 @@ export default function MatchPage() {
                   <span
                     className={twMerge(
                       "w-1 h-1 rounded-full",
-                      match.status !== "FINISHED" &&
-                        match.matchId !== "673a106c1b576d2329fee225"
-                        ? "animate-ping"
-                        : "",
-                      match.awayScore > match.homeScore
+                      match.awayScore > match.homeScore &&
+                        match.status === "FINISHED"
                         ? "bg-lime-500"
                         : "bg-transparent"
                     )}
                   />
                 </p>
               </div>
-              <p className="text-xs text-neutral-200">
-                {match.status === "FINISHED" ? "Encerrado" : "Em andamento"}
+              <p className="text-xs text-neutral-200 flex items-center gap-2 ">
+                {match.status === "FINISHED" ||
+                match.matchId === "673a106c1b576d2329fee225" ? (
+                  "Encerrado"
+                ) : (
+                  <>
+                    Em andamento
+                    <span
+                      className={twMerge(
+                        "w-1 h-1 rounded-full bg-lime-400",
+                        "animate-ping"
+                      )}
+                    />
+                  </>
+                )}
               </p>
             </div>
             <CrestComponent league={match.league} team={match.awayTeam} />
