@@ -73,13 +73,13 @@ const RatingCard = ({
       key={`rating-${rating.ratingId}`}
       className="w-full bg-neutral-900 border border-neutral-800 rounded-md text-neutral-200 p-4"
     >
-      <div className="w-full flex items-center justify-between">
+      <div className="w-full flex items-center justify-between gap-2">
         <div className="flex flex-col items-start justify-start gap-0.5">
-          <p className="text-base font-semibold">{rating.title}</p>
+          <p className="text-base font-semibold line-clamp-2">{rating.title}</p>
           <Stars color="lime" number={rating.rating} size="xs" />
         </div>
         <div className="flex flex-col items-end justify-center">
-          <p className="text-xs font-semibold">{rating.author}</p>
+          <p className="text-xs font-semibold text-right">{rating.author}</p>
           <p className="text-xs text-neutral-600">
             {formatDateLabel(rating.createdAt)}
           </p>

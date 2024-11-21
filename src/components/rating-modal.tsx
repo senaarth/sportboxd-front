@@ -204,7 +204,7 @@ export function RatingModal({
                 error={errors.title?.message}
                 id="title"
                 label="Título"
-                maxLength={30}
+                maxLength={35}
                 placeholder="Ex: Épico, vergonha, fantástico..."
                 {...register("title")}
               />
